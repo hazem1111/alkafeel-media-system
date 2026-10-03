@@ -530,33 +530,33 @@ export default function MediaDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0B132B] flex items-center justify-center text-[#00F5D4] font-black text-xl" dir="rtl">
-        جاري الاتصال بالسيرفر السحابي وتحميل البيانات... ⏳
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-teal-400 font-bold text-xl tracking-wide" dir="rtl">
+        جاري تهيئة النظام السحابي المطور... ⏳
       </div>
     );
   }
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#0B132B] flex items-center justify-center p-4 font-sans" dir="rtl">
-        <div className="bg-[#1C2541] border border-[#00F5D4]/30 p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md space-y-6 text-white">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4 font-sans" dir="rtl">
+        <div className="backdrop-blur-xl bg-slate-9ောင်/80 border border-teal-500/20 p-8 rounded-3xl shadow-2xl w-full max-w-md space-y-6 text-white">
           <div className="text-center space-y-3">
-            <div className="w-20 h-20 mx-auto bg-white rounded-full p-1 shadow-md border border-[#00F5D4] flex items-center justify-center">
-              <span className="text-xs font-bold text-[#0B132B]">الكفيل</span>
+            <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-teal-400 to-cyan-500 rounded-2xl p-1 shadow-lg shadow-teal-500/20 flex items-center justify-center">
+              <span className="text-xs font-black text-slate-950 tracking-wider">الكفيل</span>
             </div>
-            <h2 className="text-xl md:text-2xl font-black text-[#00F5D4]">مستشفى الكفيل التخصصي</h2>
-            <p className="text-xs md:text-sm text-gray-300 font-semibold">شعبة الإعلام — النظام السحابي المركزي</p>
+            <h2 className="text-2xl font-extrabold text-white tracking-tight">مستشفى الكفيل التخصصي</h2>
+            <p className="text-xs text-teal-400/90 font-medium">شعبة الإعلام — النظام السحابي المركزي المطور</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-gray-300 font-bold mb-1 text-xs md:text-sm">اسم المستخدم (الموظف)</label>
-              <input type="text" value={loginUsername} onChange={(e) => setLoginUsername(e.target.value)} placeholder="اسم المستخدم (مثال: حازم)..." className="w-full px-4 py-3 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
+              <label className="block text-slate-300 font-semibold mb-1 text-xs">اسم المستخدم (الموظف)</label>
+              <input type="text" value={loginUsername} onChange={(e) => setLoginUsername(e.target.value)} placeholder="اسم المستخدم..." className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" required />
             </div>
             <div>
-              <label className="block text-gray-300 font-bold mb-1 text-xs md:text-sm">كلمة المرور</label>
-              <input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="كلمة المرور..." className="w-full px-4 py-3 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
+              <label className="block text-slate-300 font-semibold mb-1 text-xs">كلمة المرور</label>
+              <input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="••••••••" className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" required />
             </div>
-            <button type="submit" className="w-full bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] py-3 rounded-xl font-black text-sm shadow-md">
+            <button type="submit" className="w-full bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 py-3 rounded-xl font-bold text-sm shadow-lg shadow-teal-500/20 transition transform active:scale-[0.99]">
               تسجيل الدخول للنظام 🔑
             </button>
           </form>
@@ -592,112 +592,118 @@ export default function MediaDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B132B] text-gray-100 flex flex-col md:flex-row font-sans select-none" dir="rtl">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row font-sans select-none antialiased" dir="rtl">
       
-      <div className="md:hidden bg-[#1C2541] p-4 flex justify-between items-center border-b border-[#00F5D4]/20">
-        <span className="text-[#00F5D4] font-black text-sm">إدارة الإعلام المركزي</span>
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="bg-[#0B132B] text-[#00F5D4] px-3 py-1.5 rounded-lg border border-[#00F5D4]/40 text-xs font-bold">
+      {/* رأس الشاشة للموبايل */}
+      <div className="md:hidden bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center">
+        <span className="text-teal-400 font-bold text-sm">إدارة الإعلام المركزي</span>
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="bg-slate-800 text-teal-400 px-3 py-1.5 rounded-lg border border-teal-500/30 text-xs font-bold">
           {isMobileMenuOpen ? 'إغلاق ✕' : 'القائمة ☰'}
         </button>
       </div>
 
-      <aside className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:flex w-full md:w-72 bg-[#1C2541] border-l border-[#00F5D4]/25 flex-col justify-between shadow-2xl print:hidden`}>
+      {/* القائمة الجانبية العصرية */}
+      <aside className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:flex w-full md:w-72 bg-slate-900/90 backdrop-blur-xl border-l border-slate-800 flex-col justify-between shadow-2xl print:hidden`}>
         <div>
-          <div className="p-6 border-b border-[#00F5D4]/20 space-y-3 text-center">
+          <div className="p-6 border-b border-slate-800/80 space-y-4 text-center">
             <div className="flex flex-col items-center gap-2">
-              <div className="w-16 h-16 bg-white rounded-full p-1 shadow-lg border-2 border-[#00F5D4] flex items-center justify-center">
-                <span className="text-[10px] font-black text-[#0B132B]">الكفيل</span>
+              <div className="w-14 h-14 bg-gradient-to-tr from-teal-400 to-cyan-500 rounded-2xl p-1 shadow-lg shadow-teal-500/10 flex items-center justify-center">
+                <span className="text-xs font-black text-slate-950">الكفيل</span>
               </div>
-              <div className="text-[#00F5D4] font-bold text-xs">شبكة الإعلام الطبي</div>
+              <div className="text-teal-400 font-bold text-xs tracking-wide">شبكة الإعلام الطبي</div>
             </div>
-            <div className="pt-2 text-xs bg-[#0B132B] p-2.5 rounded-xl text-gray-200 font-semibold flex justify-between items-center border border-[#00F5D4]/30">
-              <span>👤 {currentUser.name}</span>
-              <span className="text-[10px] bg-[#1C2541] text-[#00F5D4] px-2 py-0.5 rounded border border-[#00F5D4]/50">{currentUser.role}</span>
+            <div className="pt-2 text-xs bg-slate-950/60 p-3 rounded-2xl text-slate-200 font-medium flex justify-between items-center border border-slate-800">
+              <span className="truncate">👤 {currentUser.name}</span>
+              <span className="text-[10px] bg-teal-500/10 text-teal-400 px-2.5 py-0.5 rounded-full border border-teal-500/20 font-bold">{currentUser.role}</span>
             </div>
           </div>
 
-          <nav className="p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-260px)]">
+          <nav className="p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-260px)] custom-scrollbar">
             {allTabs.map((item) => (
               <button
                 key={item.name}
                 onClick={() => { setActiveTab(item.name); setIsMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-medium transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
                   activeTab === item.name 
-                    ? 'bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] shadow-lg font-black border-r-4 border-white' 
-                    : 'text-gray-300 hover:bg-[#0B132B] hover:text-[#00F5D4]'
+                    ? 'bg-gradient-to-r from-teal-400 to-cyan-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold' 
+                    : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                 }`}
               >
-                <span>{item.icon}</span>
+                <span className="text-sm">{item.icon}</span>
                 <span>{item.name}</span>
               </button>
             ))}
           </nav>
         </div>
 
-        <div className="p-4 border-t border-[#00F5D4]/20 space-y-2 bg-[#161F38]">
-          <button onClick={handleLogout} className="w-full bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 py-2.5 rounded-xl text-xs font-bold">
+        <div className="p-4 border-t border-slate-800/80 space-y-2 bg-slate-950/40">
+          <button onClick={handleLogout} className="w-full bg-rose-950/40 hover:bg-rose-900/40 text-rose-300 border border-rose-800/50 py-2.5 rounded-xl text-xs font-bold transition">
             تسجيل الخروج 🚪
           </button>
-          <p className="text-[10px] text-gray-400 text-center">السيرفر السحابي: متصل ✅</p>
+          <p className="text-[10px] text-slate-500 text-center font-semibold">النظام السحابي: متصل ✅</p>
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-[#0B132B]">
+      {/* المحتوى الرئيسي */}
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-slate-950">
         
-        <header className="hidden md:flex bg-[#1C2541] px-8 py-4 border-b border-[#00F5D4]/20 justify-between items-center shadow-sm print:hidden">
+        <header className="hidden md:flex bg-slate-900/60 backdrop-blur-md px-8 py-4 border-b border-slate-800 justify-between items-center shadow-sm print:hidden sticky top-0 z-20">
           <div>
-            <h1 className="text-2xl font-black text-[#00F5D4]">{activeTab}</h1>
-            <p className="text-xs text-gray-300 mt-0.5">النظام السحابي المركزي</p>
+            <h1 className="text-xl font-extrabold text-white">{activeTab}</h1>
+            <p className="text-xs text-slate-400 mt-0.5">النظام السحابي المركزي — مستشفى الكفيل التخصصي</p>
           </div>
-          <span className="text-xs font-bold text-[#00F5D4] bg-[#0B132B] border border-[#00F5D4]/40 px-3 py-1.5 rounded-lg">
+          <span className="text-xs font-bold text-teal-400 bg-slate-800/80 border border-teal-500/30 px-3.5 py-1.5 rounded-xl shadow-inner">
             متصل بالسيرفر السحابي ☁️
           </span>
         </header>
 
-        <div className="p-4 md:p-8">
+        <div className="p-4 md:p-8 space-y-6">
           
           {activeTab === 'الرئيسية' && (
             <div className="space-y-8">
-              <div className="bg-gradient-to-r from-[#1C2541] to-[#161F38] border border-[#00F5D4]/30 text-white p-6 md:p-8 rounded-2xl shadow-xl space-y-4">
-                <h2 className="text-xl md:text-2xl font-black text-[#00F5D4]">لوحة التحكم المركزية وسير العمل</h2>
-                <p className="text-xs md:text-sm text-gray-300 font-medium">مرحباً بك يا {currentUser.name} في نظام إدارة الإعلام بمستشفى الكفيل التخصصي.</p>
+              <div className="bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border border-teal-500/20 text-white p-6 md:p-8 rounded-3xl shadow-xl relative overflow-hidden">
+                <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-teal-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                <h2 className="text-xl md:text-2xl font-black text-white">لوحة التحكم المركزية وسير العمل</h2>
+                <p className="text-xs md:text-sm text-slate-300 font-medium mt-1">مرحباً بك يا {currentUser.name} في نظام إدارة الإعلام بمستشفى الكفيل التخصصي.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-[#1C2541] border border-[#00F5D4]/30 p-6 rounded-2xl shadow flex justify-between items-center">
+                <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-lg flex justify-between items-center hover:border-slate-700 transition">
                   <div>
-                    <span className="text-xs font-bold text-gray-300">إجمالي الرسائل الواردة والمردود عليها</span>
+                    <span className="text-xs font-bold text-slate-400">إجمالي الرسائل الواردة والمردود عليها</span>
                     <p className="text-3xl md:text-4xl font-black text-cyan-400 mt-2">{totalMessages} رسالة</p>
                   </div>
-                  <span className="text-3xl">💬</span>
+                  <span className="text-3xl p-3 bg-cyan-500/10 rounded-2xl">💬</span>
                 </div>
-                <div className="bg-[#1C2541] border border-[#00F5D4]/30 p-6 rounded-2xl shadow flex justify-between items-center">
+                <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-lg flex justify-between items-center hover:border-slate-700 transition">
                   <div>
-                    <span className="text-xs font-bold text-gray-300">إجمالي التعليقات المنجزة والمردود عليها</span>
+                    <span className="text-xs font-bold text-slate-400">إجمالي التعليقات المنجزة والمردود عليها</span>
                     <p className="text-3xl md:text-4xl font-black text-teal-400 mt-2">{totalComments} تعليق</p>
                   </div>
-                  <span className="text-3xl">✍️</span>
+                  <span className="text-3xl p-3 bg-teal-500/10 rounded-2xl">✍️</span>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <h3 className="text-base md:text-lg font-bold text-[#00F5D4]">📊 تفصيل إنجاز أنواع المواد المنجزة</h3>
+              <div className="space-y-4">
+                <h3 className="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                  <span>📊</span> تفصيل إنجاز أنواع المواد المنجزة
+                </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
-                    { label: 'أخبار', count: countByType('أخبار'), color: 'text-blue-300' },
-                    { label: 'إعلام طبي', count: countByType('إعلام طبي'), color: 'text-emerald-300' },
-                    { label: 'إعلان مركز', count: countByType('إعلان مركز') + countByType('إعلام طبي'), color: 'text-teal-300' },
-                    { label: 'نصيحة طبية', count: countByType('نصيحة طبية'), color: 'text-purple-300' },
-                    { label: 'CV طبيب', count: countByType('CV طبيب') + countByType('معلومات عامة'), color: 'text-cyan-300' },
-                    { label: 'كاروسيل', count: countByType('كاروسيل'), color: 'text-orange-300' },
-                    { label: 'فيديو وبرومو', count: countByType('فيديو') + countByType('برومو'), color: 'text-pink-300' },
-                    { label: 'تقرير فيديوي', count: countByType('تقرير فيديوي'), color: 'text-red-300' },
-                    { label: 'العمليات الجراحية', count: countByType('العمليات الجراحية'), color: 'text-yellow-300' },
-                    { label: 'إجمالي المنجز', count: archivedTasks.length, color: 'text-[#00F5D4]' }
+                    { label: 'أخبار', count: countByType('أخبار'), color: 'text-blue-400' },
+                    { label: 'إعلام طبي', count: countByType('إعلام طبي'), color: 'text-emerald-400' },
+                    { label: 'إعلان مركز', count: countByType('إعلان مركز') + countByType('إعلام طبي'), color: 'text-teal-400' },
+                    { label: 'نصيحة طبية', count: countByType('نصيحة طبية'), color: 'text-purple-400' },
+                    { label: 'CV طبيب', count: countByType('CV طبيب') + countByType('معلومات عامة'), color: 'text-cyan-400' },
+                    { label: 'كاروسيل', count: countByType('كاروسيل'), color: 'text-amber-400' },
+                    { label: 'فيديو وبرومو', count: countByType('فيديو') + countByType('برومو'), color: 'text-pink-400' },
+                    { label: 'تقرير فيديوي', count: countByType('تقرير فيديوي'), color: 'text-rose-400' },
+                    { label: 'العمليات الجراحية', count: countByType('العمليات الجراحية'), color: 'text-yellow-400' },
+                    { label: 'إجمالي المنجز', count: archivedTasks.length, color: 'text-teal-300 font-black' }
                   ].map((item, idx) => (
-                    <div key={idx} className="bg-[#1C2541] border border-[#00F5D4]/25 p-4 rounded-xl flex justify-between items-center shadow">
-                      <span className="text-xs font-bold text-gray-200">{item.label}</span>
-                      <span className={`text-xl md:text-2xl font-black ${item.color}`}>{item.count}</span>
+                    <div key={idx} className="bg-slate-900/60 border border-slate-800/80 p-4 rounded-2xl flex justify-between items-center shadow-sm hover:border-slate-700 transition">
+                      <span className="text-xs font-semibold text-slate-300">{item.label}</span>
+                      <span className={`text-xl md:text-2xl font-bold ${item.color}`}>{item.count}</span>
                     </div>
                   ))}
                 </div>
@@ -708,29 +714,29 @@ export default function MediaDashboard() {
           {activeTab === '1. التصوير' && (
             <div className="space-y-6 max-w-3xl mx-auto">
               {canEditSection('cameraman') && (
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6">
-                  <h2 className="text-lg md:text-xl font-bold text-white">📷 صفحة المصور: إضافة مادة جديدة</h2>
+                <div className="bg-slate-900/80 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
+                  <h2 className="text-lg font-bold text-white">📷 صفحة المصور: إضافة مادة جديدة</h2>
                   <form onSubmit={handleCameramanSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">عنوان المادة *</label>
-                      <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="اسم المادة..." className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">عنوان المادة *</label>
+                      <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="اسم المادة..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" required />
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">اختر المصور 👤</label>
-                      <select value={newCameramanName} onChange={(e) => setNewCameramanName(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">اختر المصور 👤</label>
+                      <select value={newCameramanName} onChange={(e) => setNewCameramanName(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                         <option value="حيدر ضياء جابر">حيدر ضياء جابر</option>
                         <option value="ياسر محمد مهدي">ياسر محمد مهدي</option>
                         <option value={currentUser.name}>{currentUser.name} (الحساب الحالي)</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">تاريخ التصوير والإضافة 📅</label>
-                      <input type="date" value={newAddDate} onChange={(e) => setNewAddDate(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-bold rounded-xl text-sm outline-none" style={{ colorScheme: 'light' }} />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">تاريخ التصوير والإضافة 📅</label>
+                      <input type="date" value={newAddDate} onChange={(e) => setNewAddDate(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" style={{ colorScheme: 'dark' }} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">نوع المادة</label>
-                        <select value={newContentType} onChange={(e) => setNewContentType(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">نوع المادة</label>
+                        <select value={newContentType} onChange={(e) => setNewContentType(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                           <option value="أخبار">أخبار</option>
                           <option value="إعلام طبي">إعلام طبي</option>
                           <option value="إعلان مركز">إعلان مركز (إعلان طبي)</option>
@@ -744,8 +750,8 @@ export default function MediaDashboard() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">نوع التصوير</label>
-                        <select value={newShootType} onChange={(e) => setNewShootType(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">نوع التصوير</label>
+                        <select value={newShootType} onChange={(e) => setNewShootType(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                           <option value="فوتو">فوتو</option>
                           <option value="فيديو">فيديو</option>
                           <option value="فيديو وفوتو">فيديو وفوتو سوية</option>
@@ -754,11 +760,11 @@ export default function MediaDashboard() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">ملاحظات العمل أو التعديل 📝</label>
-                      <textarea value={newNotes} onChange={(e) => setNewNotes(e.target.value)} placeholder="ملاحظات..." className="w-full px-4 py-2 bg-white text-gray-900 font-medium rounded-xl text-sm outline-none h-20 resize-none"></textarea>
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">ملاحظات العمل أو التعديل 📝</label>
+                      <textarea value={newNotes} onChange={(e) => setNewNotes(e.target.value)} placeholder="ملاحظات..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition h-24 resize-none"></textarea>
                     </div>
-                    <div className="flex justify-end pt-4 border-t border-[#00F5D4]/20">
-                      <button type="submit" className="bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] px-8 py-2.5 rounded-xl font-black text-sm shadow">حفظ وإرسال للتدقيق الفيديوي</button>
+                    <div className="flex justify-end pt-2">
+                      <button type="submit" className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-teal-500/20 transition">حفظ وإرسال للتدقيق الفيديوي</button>
                     </div>
                   </form>
                 </div>
@@ -768,18 +774,18 @@ export default function MediaDashboard() {
 
           {activeTab === '1.5. التدقيق الفيديوي' && (
             <div className="space-y-4">
-              <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 rounded-2xl space-y-4 shadow">
-                <h2 className="text-lg font-bold text-[#00F5D4]">متابعة قسم: التدقيق الفيديوي</h2>
-                <div className="bg-[#0B132B] p-4 rounded-xl border border-[#00F5D4]/20 overflow-x-auto">
+              <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl">
+                <h2 className="text-lg font-bold text-white">متابعة قسم: التدقيق الفيديوي</h2>
+                <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 overflow-x-auto">
                   <table className="w-full text-right min-w-[700px]">
                     <thead>
-                      <tr className="text-xs text-[#00F5D4] border-b border-gray-800">
+                      <tr className="text-xs font-bold text-teal-400 border-b border-slate-800">
                         <th className="p-3">عنوان المادة</th>
                         <th className="p-3">اختر مدقق الفيديو (طارق أو رشا) 🎥</th>
                         <th className="p-3 text-center">أزرار التحكم وإدارة المراحل</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800 text-sm">
+                    <tbody className="divide-y divide-slate-800/60 text-sm">
                       {tasks.filter(t => t.stage === '1.5. التدقيق الفيديوي').length > 0 ? (
                         tasks.filter(t => t.stage === '1.5. التدقيق الفيديوي').map(t => (
                           <VideoCheckerRow 
@@ -796,7 +802,7 @@ export default function MediaDashboard() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="3" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في هذا القسم.</td>
+                          <td colSpan="3" className="p-8 text-center text-slate-500 text-xs font-semibold">لا توجد مواد حالياً في هذا القسم.</td>
                         </tr>
                       )}
                     </tbody>
@@ -809,21 +815,21 @@ export default function MediaDashboard() {
           {activeTab === '3. التحرير' && (
             <div className="space-y-6 max-w-3xl mx-auto">
               {canEditSection('editor') && (
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6">
-                  <h2 className="text-lg md:text-xl font-bold text-white">✏️ صفحة المحرر: إضافة وتوجيه مادة جديدة</h2>
+                <div className="bg-slate-900/80 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
+                  <h2 className="text-lg font-bold text-white">✏️ صفحة المحرر: إضافة وتوجيه مادة جديدة</h2>
                   <form onSubmit={handleEditorSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">عنوان المادة التحريرية *</label>
-                      <input type="text" value={editorTitle} onChange={(e) => setEditorTitle(e.target.value)} placeholder="عنوان الخبر..." className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">عنوان المادة التحريرية *</label>
+                      <input type="text" value={editorTitle} onChange={(e) => setEditorTitle(e.target.value)} placeholder="عنوان الخبر..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" required />
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">تاريخ إضافة المادة 📅</label>
-                      <input type="date" value={editorAddDate} onChange={(e) => setEditorAddDate(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-bold rounded-xl text-sm outline-none" style={{ colorScheme: 'light' }} />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">تاريخ إضافة المادة 📅</label>
+                      <input type="date" value={editorAddDate} onChange={(e) => setEditorAddDate(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" style={{ colorScheme: 'dark' }} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">نوع المادة</label>
-                        <select value={editorContentType} onChange={(e) => setEditorContentType(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">نوع المادة</label>
+                        <select value={editorContentType} onChange={(e) => setEditorContentType(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                           <option value="أخبار">أخبار</option>
                           <option value="إعلام طبي">إعلام طبي</option>
                           <option value="إعلان مركز">إعلان مركز</option>
@@ -834,19 +840,19 @@ export default function MediaDashboard() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">توجيه المادة إلى:</label>
-                        <select value={editorTarget} onChange={(e) => setEditorTarget(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">توجيه المادة إلى:</label>
+                        <select value={editorTarget} onChange={(e) => setEditorTarget(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                           <option value="4. التصميم">قسـم التصميم 🎨</option>
                           <option value="5. المونتاج">قسـم المونتاج 🎬</option>
                         </select>
                       </div>
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">ملاحظات العمل 📝</label>
-                      <textarea value={editorNotes} onChange={(e) => setEditorNotes(e.target.value)} placeholder="ملاحظات المحرر..." className="w-full px-4 py-2 bg-white text-gray-900 font-medium rounded-xl text-sm outline-none h-20 resize-none"></textarea>
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">ملاحظات العمل 📝</label>
+                      <textarea value={editorNotes} onChange={(e) => setEditorNotes(e.target.value)} placeholder="ملاحظات المحرر..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition h-24 resize-none"></textarea>
                     </div>
-                    <div className="flex justify-end pt-4 border-t border-[#00F5D4]/20">
-                      <button type="submit" className="bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] px-8 py-2.5 rounded-xl font-black text-sm shadow">حفظ وإرسال للقسم المختار</button>
+                    <div className="flex justify-end pt-2">
+                      <button type="submit" className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-teal-500/20 transition">حفظ وإرسال للقسم المختار</button>
                     </div>
                   </form>
                 </div>
@@ -854,42 +860,42 @@ export default function MediaDashboard() {
 
               <div className="space-y-4 pt-4">
                 <h3 className="font-bold text-white text-base">المواد الواردة إلى قسم التحرير</h3>
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
+                <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-x-auto shadow-xl">
                   <table className="w-full text-right min-w-[700px]">
                     <thead>
-                      <tr className="text-xs text-[#00F5D4] border-b border-gray-800">
+                      <tr className="text-xs font-bold text-teal-400 border-b border-slate-800">
                         <th className="p-3">عنوان المادة</th>
                         <th className="p-3">النوع والتاريخ</th>
                         <th className="p-3">ملاحظات العمل</th>
                         <th className="p-3 text-center">أزرار التحكم وإدارة المراحل</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800 text-sm">
+                    <tbody className="divide-y divide-slate-800/60 text-sm">
                       {tasks.filter(t => t.stage === '3. التحرير').length > 0 ? (
                         tasks.filter(t => t.stage === '3. التحرير').map(t => {
                           const allowed = isAllowedToManageSection('3. التحرير');
                           return (
-                            <tr key={t.id} className={`hover:bg-gray-900/50 ${!allowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
+                            <tr key={t.id} className={`hover:bg-slate-800/30 ${!allowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-rose-950/20 border-r-4 border-rose-500' : ''}`}>
                               <td className="p-3 font-bold text-white flex items-center gap-2">
-                                {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
+                                {t.hasError && <span className="bg-rose-500 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ خلل</span>}
                                 <span>{t.title}</span>
                               </td>
-                              <td className="p-3 text-xs text-gray-300">
+                              <td className="p-3 text-xs text-slate-300">
                                 <div>{t.contentType}</div>
-                                <div className="text-[10px] text-gray-400">📅 {t.addDate || 'بدون تاريخ'}</div>
+                                <div className="text-[10px] text-slate-500">📅 {t.addDate || 'بدون تاريخ'}</div>
                               </td>
                               <td className="p-3 text-xs text-amber-300">
                                 {t.notes || 'لا توجد ملاحظات'}
-                                {allowed && <button onClick={() => handleEditTaskNotes(t.id)} className="block text-[10px] text-blue-400 underline mt-1">تعديل الملاحظات 📝</button>}
+                                {allowed && <button onClick={() => handleEditTaskNotes(t.id)} className="block text-[10px] text-cyan-400 underline mt-1">تعديل الملاحظات 📝</button>}
                               </td>
                               <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
                                 {allowed ? (
                                   <>
-                                    <button onClick={() => handleStageAction(t.id, '3. التحرير', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">⬅ إرجاع للتدقيق</button>
-                                    <button onClick={() => handleStageAction(t.id, '3. التحرير', 'advance')} className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold">إرسال للمونتاج ➡</button>
+                                    <button onClick={() => handleStageAction(t.id, '3. التحرير', 'return')} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">⬅ إرجاع للتدقيق</button>
+                                    <button onClick={() => handleStageAction(t.id, '3. التحرير', 'advance')} className="px-3 py-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 rounded-xl text-xs font-bold">إرسال للمونتاج ➡</button>
                                   </>
                                 ) : (
-                                  <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded border border-gray-800">مشاهدة فقط 🔒</span>
+                                  <span className="text-xs text-slate-500 font-bold bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">قفل 🔒</span>
                                 )}
                               </td>
                             </tr>
@@ -897,7 +903,7 @@ export default function MediaDashboard() {
                         })
                       ) : (
                         <tr>
-                          <td colSpan="4" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في قسم التحرير.</td>
+                          <td colSpan="4" className="p-8 text-center text-slate-500 text-xs font-semibold">لا توجد مواد حالياً في قسم التحرير.</td>
                         </tr>
                       )}
                     </tbody>
@@ -910,20 +916,20 @@ export default function MediaDashboard() {
           {activeTab === '4. التصميم' && (
             <div className="space-y-6 max-w-3xl mx-auto">
               {canEditSection('designer') && (
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6">
-                  <h2 className="text-lg md:text-xl font-bold text-white">🎨 صفحة المصمم: إضافة مادة تصميم وتوجيهها للتدقيق النهائي</h2>
+                <div className="bg-slate-900/80 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
+                  <h2 className="text-lg font-bold text-white">🎨 صفحة المصمم: إضافة مادة تصميم وتوجيهها للتدقيق النهائي</h2>
                   <form onSubmit={handleDesignerSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">عنوان التصميم *</label>
-                      <input type="text" value={designerTitle} onChange={(e) => setDesignerTitle(e.target.value)} placeholder="اسم التصميم..." className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">عنوان التصميم *</label>
+                      <input type="text" value={designerTitle} onChange={(e) => setDesignerTitle(e.target.value)} placeholder="اسم التصميم..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" required />
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">تاريخ الإضافة 📅</label>
-                      <input type="date" value={designerAddDate} onChange={(e) => setDesignerAddDate(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-bold rounded-xl text-sm outline-none" style={{ colorScheme: 'light' }} />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">تاريخ الإضافة 📅</label>
+                      <input type="date" value={designerAddDate} onChange={(e) => setDesignerAddDate(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" style={{ colorScheme: 'dark' }} />
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">نوع التصميم</label>
-                      <select value={designerContentType} onChange={(e) => setDesignerContentType(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">نوع التصميم</label>
+                      <select value={designerContentType} onChange={(e) => setDesignerContentType(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                         <option value="إعلام طبي">إعلام طبي</option>
                         <option value="إعلان مركز">إعلان مركز</option>
                         <option value="نصيحة طبية">نصيحة طبية</option>
@@ -933,11 +939,11 @@ export default function MediaDashboard() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">ملاحظات العمل 📝</label>
-                      <textarea value={designerNotes} onChange={(e) => setDesignerNotes(e.target.value)} placeholder="ملاحظات المصمم..." className="w-full px-4 py-2 bg-white text-gray-900 font-medium rounded-xl text-sm outline-none h-20 resize-none"></textarea>
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">ملاحظات العمل 📝</label>
+                      <textarea value={designerNotes} onChange={(e) => setDesignerNotes(e.target.value)} placeholder="ملاحظات المصمم..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition h-24 resize-none"></textarea>
                     </div>
-                    <div className="flex justify-end pt-4 border-t border-[#00F5D4]/20">
-                      <button type="submit" className="bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] px-8 py-2.5 rounded-xl font-black text-sm shadow">حفظ وإرسال للتدقيق النهائي والنشر</button>
+                    <div className="flex justify-end pt-2">
+                      <button type="submit" className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-teal-500/20 transition">حفظ وإرسال للتدقيق النهائي والنشر</button>
                     </div>
                   </form>
                 </div>
@@ -945,29 +951,29 @@ export default function MediaDashboard() {
 
               <div className="space-y-4 pt-4">
                 <h3 className="font-bold text-white text-base">المواد الواردة إلى قسم التصميم</h3>
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
+                <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-x-auto shadow-xl">
                   <table className="w-full text-right min-w-[700px]">
                     <thead>
-                      <tr className="text-xs text-[#00F5D4] border-b border-gray-800">
+                      <tr className="text-xs font-bold text-teal-400 border-b border-slate-800">
                         <th className="p-3">عنوان التصميم</th>
                         <th className="p-3">النوع والتاريخ</th>
                         <th className="p-3">ملاحظات العمل</th>
                         <th className="p-3 text-center">أزرار التحكم وإدارة المراحل</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800 text-sm">
+                    <tbody className="divide-y divide-slate-800/60 text-sm">
                       {tasks.filter(t => t.stage === '4. التصميم').length > 0 ? (
                         tasks.filter(t => t.stage === '4. التصميم').map(t => {
                           const allowed = isAllowedToManageSection('4. التصميم');
                           return (
-                            <tr key={t.id} className={`hover:bg-gray-900/50 ${!allowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
+                            <tr key={t.id} className={`hover:bg-slate-800/30 ${!allowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-rose-950/20 border-r-4 border-rose-500' : ''}`}>
                               <td className="p-3 font-bold text-white flex items-center gap-2">
-                                {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
+                                {t.hasError && <span className="bg-rose-500 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ خلل</span>}
                                 <span>{t.title}</span>
                               </td>
-                              <td className="p-3 text-xs text-gray-300">
+                              <td className="p-3 text-xs text-slate-300">
                                 <div>{t.contentType}</div>
-                                <div className="text-[10px] text-gray-400">📅 {t.addDate || 'بدون تاريخ'}</div>
+                                <div className="text-[10px] text-slate-500">📅 {t.addDate || 'بدون تاريخ'}</div>
                               </td>
                               <td className="p-3 text-xs text-amber-300">
                                 {t.notes || 'لا توجد ملاحظات'}
@@ -975,11 +981,11 @@ export default function MediaDashboard() {
                               <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
                                 {allowed ? (
                                   <>
-                                    <button onClick={() => handleStageAction(t.id, '4. التصميم', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">⬅ إرجاع للتحرير</button>
-                                    <button onClick={() => handleStageAction(t.id, '4. التصميم', 'advance')} className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold">إرسال للتدقيق النهائي ➡</button>
+                                    <button onClick={() => handleStageAction(t.id, '4. التصميم', 'return')} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">⬅ إرجاع للتحرير</button>
+                                    <button onClick={() => handleStageAction(t.id, '4. التصميم', 'advance')} className="px-3 py-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 rounded-xl text-xs font-bold">إرسال للتدقيق النهائي ➡</button>
                                   </>
                                 ) : (
-                                  <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded border border-gray-800">مشاهدة فقط 🔒</span>
+                                  <span className="text-xs text-slate-500 font-bold bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">قفل 🔒</span>
                                 )}
                               </td>
                             </tr>
@@ -987,7 +993,7 @@ export default function MediaDashboard() {
                         })
                       ) : (
                         <tr>
-                          <td colSpan="4" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في قسم التصميم.</td>
+                          <td colSpan="4" className="p-8 text-center text-slate-500 text-xs font-semibold">لا توجد مواد حالياً في قسم التصميم.</td>
                         </tr>
                       )}
                     </tbody>
@@ -1000,20 +1006,20 @@ export default function MediaDashboard() {
           {activeTab === '5. المونتاج' && (
             <div className="space-y-6 max-w-3xl mx-auto">
               {canEditSection('montage') && (
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6">
-                  <h2 className="text-lg md:text-xl font-bold text-white">🎬 صفحة المونتير: إضافة وتوجيه فيديو جديد</h2>
+                <div className="bg-slate-900/80 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
+                  <h2 className="text-lg font-bold text-white">🎬 صفحة المونتير: إضافة وتوجيه فيديو جديد</h2>
                   <form onSubmit={handleMontageSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">عنوان الفيديو *</label>
-                      <input type="text" value={montageTitle} onChange={(e) => setMontageTitle(e.target.value)} placeholder="اسم الفيديو..." className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">عنوان الفيديو *</label>
+                      <input type="text" value={montageTitle} onChange={(e) => setMontageTitle(e.target.value)} placeholder="اسم الفيديو..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" required />
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">تاريخ الإضافة 📅</label>
-                      <input type="date" value={montageAddDate} onChange={(e) => setMontageAddDate(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-bold rounded-xl text-sm outline-none" style={{ colorScheme: 'light' }} />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">تاريخ الإضافة 📅</label>
+                      <input type="date" value={montageAddDate} onChange={(e) => setMontageAddDate(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" style={{ colorScheme: 'dark' }} />
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">نوع الفيديو</label>
-                      <select value={montageContentType} onChange={(e) => setMontageContentType(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">نوع الفيديو</label>
+                      <select value={montageContentType} onChange={(e) => setMontageContentType(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                         <option value="فيديو">فيديو</option>
                         <option value="برومو">برومو</option>
                         <option value="تقرير فيديوي">تقرير فيديوي</option>
@@ -1021,11 +1027,11 @@ export default function MediaDashboard() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">ملاحظات العمل 📝</label>
-                      <textarea value={montageNotes} onChange={(e) => setMontageNotes(e.target.value)} placeholder="ملاحظات المونتير..." className="w-full px-4 py-2 bg-white text-gray-900 font-medium rounded-xl text-sm outline-none h-20 resize-none"></textarea>
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">ملاحظات العمل 📝</label>
+                      <textarea value={montageNotes} onChange={(e) => setMontageNotes(e.target.value)} placeholder="ملاحظات المونتير..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition h-24 resize-none"></textarea>
                     </div>
-                    <div className="flex justify-end pt-4 border-t border-[#00F5D4]/20">
-                      <button type="submit" className="bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] px-8 py-2.5 rounded-xl font-black text-sm shadow">حفظ وإرسال للتدقيق النهائي والنشر</button>
+                    <div className="flex justify-end pt-2">
+                      <button type="submit" className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-teal-500/20 transition">حفظ وإرسال للتدقيق النهائي والنشر</button>
                     </div>
                   </form>
                 </div>
@@ -1033,29 +1039,29 @@ export default function MediaDashboard() {
 
               <div className="space-y-4 pt-4">
                 <h3 className="font-bold text-white text-base">المواد الواردة إلى قسم المونتاج</h3>
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
+                <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-x-auto shadow-xl">
                   <table className="w-full text-right min-w-[700px]">
                     <thead>
-                      <tr className="text-xs text-[#00F5D4] border-b border-gray-800">
+                      <tr className="text-xs font-bold text-teal-400 border-b border-slate-800">
                         <th className="p-3">عنوان الفيديو</th>
                         <th className="p-3">النوع والتاريخ</th>
                         <th className="p-3">ملاحظات العمل</th>
                         <th className="p-3 text-center">أزرار التحكم وإدارة المراحل</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800 text-sm">
+                    <tbody className="divide-y divide-slate-800/60 text-sm">
                       {tasks.filter(t => t.stage === '5. المونتاج').length > 0 ? (
                         tasks.filter(t => t.stage === '5. المونتاج').map(t => {
                           const allowed = isAllowedToManageSection('5. المونتاج');
                           return (
-                            <tr key={t.id} className={`hover:bg-gray-900/50 ${!allowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
+                            <tr key={t.id} className={`hover:bg-slate-800/30 ${!allowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-rose-950/20 border-r-4 border-rose-500' : ''}`}>
                               <td className="p-3 font-bold text-white flex items-center gap-2">
-                                {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
+                                {t.hasError && <span className="bg-rose-500 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ خلل</span>}
                                 <span>{t.title}</span>
                               </td>
-                              <td className="p-3 text-xs text-gray-300">
+                              <td className="p-3 text-xs text-slate-300">
                                 <div>{t.contentType}</div>
-                                <div className="text-[10px] text-gray-400">📅 {t.addDate || 'بدون تاريخ'}</div>
+                                <div className="text-[10px] text-slate-500">📅 {t.addDate || 'بدون تاريخ'}</div>
                               </td>
                               <td className="p-3 text-xs text-amber-300">
                                 {t.notes || 'لا توجد ملاحظات'}
@@ -1063,11 +1069,11 @@ export default function MediaDashboard() {
                               <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
                                 {allowed ? (
                                   <>
-                                    <button onClick={() => handleStageAction(t.id, '5. المونتاج', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">⬅ إرجاع للتحرير</button>
-                                    <button onClick={() => handleStageAction(t.id, '5. المونتاج', 'advance')} className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold">إرسال للتدقيق النهائي ➡</button>
+                                    <button onClick={() => handleStageAction(t.id, '5. المونتاج', 'return')} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">⬅ إرجاع للتحرير</button>
+                                    <button onClick={() => handleStageAction(t.id, '5. المونتاج', 'advance')} className="px-3 py-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 rounded-xl text-xs font-bold">إرسال للتدقيق النهائي ➡</button>
                                   </>
                                 ) : (
-                                  <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded border border-gray-800">مشاهدة فقط 🔒</span>
+                                  <span className="text-xs text-slate-500 font-bold bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">قفل 🔒</span>
                                 )}
                               </td>
                             </tr>
@@ -1075,7 +1081,7 @@ export default function MediaDashboard() {
                         })
                       ) : (
                         <tr>
-                          <td colSpan="4" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في قسم المونتاج.</td>
+                          <td colSpan="4" className="p-8 text-center text-slate-500 text-xs font-semibold">لا توجد مواد حالياً في قسم المونتاج.</td>
                         </tr>
                       )}
                     </tbody>
@@ -1087,18 +1093,18 @@ export default function MediaDashboard() {
 
           {activeTab === '6. التدقيق النهائي' && (
             <div className="space-y-4">
-              <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 rounded-2xl space-y-4 shadow">
-                <h2 className="text-lg font-bold text-[#00F5D4]">متابعة قسم: التدقيق النهائي</h2>
-                <div className="bg-[#0B132B] p-4 rounded-xl border border-[#00F5D4]/20 overflow-x-auto">
+              <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl">
+                <h2 className="text-lg font-bold text-white">متابعة قسم: التدقيق النهائي</h2>
+                <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 overflow-x-auto">
                   <table className="w-full text-right min-w-[700px]">
                     <thead>
-                      <tr className="text-xs text-[#00F5D4] border-b border-gray-800">
+                      <tr className="text-xs font-bold text-teal-400 border-b border-slate-800">
                         <th className="p-3">عنوان المادة</th>
                         <th className="p-3">اختر مدقق التدقيق النهائي (زهراء أو رشا) ✔️</th>
                         <th className="p-3 text-center">أزرار التحكم وإدارة المراحل</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800 text-sm">
+                    <tbody className="divide-y divide-slate-800/60 text-sm">
                       {tasks.filter(t => t.stage === '6. التدقيق النهائي').length > 0 ? (
                         tasks.filter(t => t.stage === '6. التدقيق النهائي').map(t => (
                           <FinalCheckerRow 
@@ -1115,7 +1121,7 @@ export default function MediaDashboard() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="3" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في هذا القسم.</td>
+                          <td colSpan="3" className="p-8 text-center text-slate-500 text-xs font-semibold">لا توجد مواد حالياً في هذا القسم.</td>
                         </tr>
                       )}
                     </tbody>
@@ -1128,17 +1134,17 @@ export default function MediaDashboard() {
           {activeTab === '7. النشر' && (
             <div className="space-y-8">
               {canEditSection('publisher') && (
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6 max-w-3xl mx-auto">
-                  <h2 className="text-lg md:text-xl font-bold text-white">🚀 قسم النشر: إضافة وإعادة نشر مادة جاهزة</h2>
+                <div className="bg-slate-900/80 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl space-y-6 max-w-3xl mx-auto">
+                  <h2 className="text-lg font-bold text-white">🚀 قسم النشر: إضافة وإعادة نشر مادة جاهزة</h2>
                   <form onSubmit={handleDirectPublishSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">اسم المادة / العنوان *</label>
-                      <input type="text" value={directPubTitle} onChange={(e) => setDirectPubTitle(e.target.value)} placeholder="مثال: CV الدكتور أحمد / إعلان مركز العيون..." className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">اسم المادة / العنوان *</label>
+                      <input type="text" value={directPubTitle} onChange={(e) => setDirectPubTitle(e.target.value)} placeholder="مثال: CV الدكتور أحمد..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" required />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">نوع المادة</label>
-                        <select value={directPubType} onChange={(e) => setDirectPubType(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">نوع المادة</label>
+                        <select value={directPubType} onChange={(e) => setDirectPubType(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition">
                           <option value="أخبار">أخبار</option>
                           <option value="إعلام طبي">إعلام طبي</option>
                           <option value="إعلان مركز">إعلان مركز</option>
@@ -1150,14 +1156,14 @@ export default function MediaDashboard() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">تاريخ النشر 📅</label>
-                        <input type="date" value={directPubDate} onChange={(e) => setDirectPubDate(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-bold rounded-xl text-sm outline-none" style={{ colorScheme: 'light' }} />
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">تاريخ النشر 📅</label>
+                        <input type="date" value={directPubDate} onChange={(e) => setDirectPubDate(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" style={{ colorScheme: 'dark' }} />
                       </div>
                     </div>
 
                     <div>
-                      <span className="text-gray-200 font-bold block mb-1 text-sm">اختر منصات النشر للمادة:</span>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-[#0B132B] p-3 rounded-xl border border-[#00F5D4]/20">
+                      <span className="text-slate-300 font-semibold block mb-2 text-xs">اختر منصات النشر للمادة:</span>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-950 p-4 rounded-2xl border border-slate-800">
                         {[
                           { key: 'facebook', label: 'فيسبوك' },
                           { key: 'instagram', label: 'انستغرام' },
@@ -1167,12 +1173,12 @@ export default function MediaDashboard() {
                           { key: 'x', label: 'منصة إكس' },
                           { key: 'website', label: 'الموقع الإلكتروني' }
                         ].map(p => (
-                          <label key={p.key} className="flex items-center gap-2 cursor-pointer text-gray-200 text-xs">
+                          <label key={p.key} className="flex items-center gap-2 cursor-pointer text-slate-300 text-xs font-medium">
                             <input 
                               type="checkbox" 
                               checked={!!directPubPlatforms[p.key]} 
                               onChange={() => setDirectPubPlatforms(prev => ({ ...prev, [p.key]: !prev[p.key] }))}
-                              className="w-4 h-4 accent-[#00F5D4]"
+                              className="w-4 h-4 accent-teal-400 rounded"
                             />
                             <span>{p.label}</span>
                           </label>
@@ -1181,35 +1187,35 @@ export default function MediaDashboard() {
                     </div>
 
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">رابط النشر 🔗</label>
-                      <input type="text" value={directPubLink} onChange={(e) => setDirectPubLink(e.target.value)} placeholder="https://..." className="w-full px-4 py-2 bg-white text-gray-900 rounded-xl text-sm outline-none" />
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">رابط النشر 🔗</label>
+                      <input type="text" value={directPubLink} onChange={(e) => setDirectPubLink(e.target.value)} placeholder="https://..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" />
                     </div>
 
                     <div>
-                      <label className="block text-gray-200 font-bold mb-1 text-sm">ملاحظات 📝</label>
-                      <textarea value={directPubNotes} onChange={(e) => setDirectPubNotes(e.target.value)} placeholder="ملاحظات النشر..." className="w-full px-4 py-2 bg-white text-gray-900 font-medium rounded-xl text-sm outline-none h-16 resize-none"></textarea>
+                      <label className="block text-slate-300 font-semibold mb-1 text-xs">ملاحظات 📝</label>
+                      <textarea value={directPubNotes} onChange={(e) => setDirectPubNotes(e.target.value)} placeholder="ملاحظات النشر..." className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition h-20 resize-none"></textarea>
                     </div>
 
                     <div className="flex justify-end pt-2">
-                      <button type="submit" className="bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] px-8 py-2.5 rounded-xl font-black text-sm shadow">نشر وتوثيق المادة مباشرة 🚀</button>
+                      <button type="submit" className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-teal-500/20 transition">نشر وتوثيق المادة مباشرة 🚀</button>
                     </div>
                   </form>
                 </div>
               )}
 
-              <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 rounded-2xl space-y-4 shadow">
-                <h2 className="text-lg font-bold text-[#00F5D4]">متابعة مواد قسم النشر</h2>
-                <div className="bg-[#0B132B] p-4 rounded-xl border border-[#00F5D4]/20 overflow-x-auto">
+              <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl">
+                <h2 className="text-lg font-bold text-white">متابعة مواد قسم النشر</h2>
+                <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 overflow-x-auto">
                   <table className="w-full text-right min-w-[700px]">
                     <thead>
-                      <tr className="text-xs text-[#00F5D4] border-b border-gray-800">
+                      <tr className="text-xs font-bold text-teal-400 border-b border-slate-800">
                         <th className="p-3">عنوان المادة</th>
-                        <th className="p-3">تفاصيل النشر (اختر المنصات، الحالة، الرابط) 🚀</th>
+                        <th className="p-3">تفاصيل النشر (المنصات، الحالة، الرابط) 🚀</th>
                         <th className="p-3">ملاحظات العمل</th>
                         <th className="p-3 text-center">أزرار التحكم وإدارة المراحل</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800 text-sm">
+                    <tbody className="divide-y divide-slate-800/60 text-sm">
                       {tasks.filter(t => t.stage === '7. النشر').length > 0 ? (
                         tasks.filter(t => t.stage === '7. النشر').map(t => (
                           <PublishRow 
@@ -1227,7 +1233,7 @@ export default function MediaDashboard() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في قسم النشر.</td>
+                          <td colSpan="4" className="p-8 text-center text-slate-500 text-xs font-semibold">لا توجد مواد حالياً في قسم النشر.</td>
                         </tr>
                       )}
                     </tbody>
@@ -1240,25 +1246,25 @@ export default function MediaDashboard() {
           {activeTab === '8. الرد على التواصل الاجتماعي' && (
             <div className="space-y-6 max-w-5xl mx-auto">
               {canEditSection('social') && (
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6">
-                  <h2 className="text-lg md:text-xl font-bold text-[#00F5D4]">💬 تسجيل نشاط الرد على الرسائل والتعليقات اليومي</h2>
+                <div className="bg-slate-900/80 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl space-y-6">
+                  <h2 className="text-lg font-bold text-white">💬 تسجيل نشاط الرد على الرسائل والتعليقات اليومي</h2>
                   <form onSubmit={handleSocialSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">التاريخ 📅</label>
-                        <input type="date" value={socialDate} onChange={(e) => setSocialDate(e.target.value)} className="w-full px-4 py-2.5 bg-white text-gray-900 font-bold rounded-xl text-sm outline-none" style={{ colorScheme: 'light' }} />
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">التاريخ 📅</label>
+                        <input type="date" value={socialDate} onChange={(e) => setSocialDate(e.target.value)} className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" style={{ colorScheme: 'dark' }} />
                       </div>
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">عدد الرسائل المضافة</label>
-                        <input type="number" min="0" value={socialMessages} onChange={(e) => setSocialMessages(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" />
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">عدد الرسائل المضافة</label>
+                        <input type="number" min="0" value={socialMessages} onChange={(e) => setSocialMessages(e.target.value)} placeholder="0" className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" />
                       </div>
                       <div>
-                        <label className="block text-gray-200 font-bold mb-1 text-sm">عدد التعليقات المضافة</label>
-                        <input type="number" min="0" value={socialComments} onChange={(e) => setSocialComments(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" />
+                        <label className="block text-slate-300 font-semibold mb-1 text-xs">عدد التعليقات المضافة</label>
+                        <input type="number" min="0" value={socialComments} onChange={(e) => setSocialComments(e.target.value)} placeholder="0" className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400 transition" />
                       </div>
                     </div>
                     <div className="flex justify-end pt-2">
-                      <button type="submit" className="bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] px-6 py-2.5 rounded-xl font-black text-sm shadow">حفظ وتوثيق النشاط اليومي</button>
+                      <button type="submit" className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-teal-500/20 transition">حفظ وتوثيق النشاط اليومي</button>
                     </div>
                   </form>
                 </div>
@@ -1266,10 +1272,10 @@ export default function MediaDashboard() {
 
               <div className="space-y-4">
                 <h3 className="font-bold text-white text-base">سجلات نشاط التواصل الاجتماعي (متتالية الأيام)</h3>
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
+                <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-x-auto shadow-xl">
                   <table className="w-full text-right border-collapse min-w-[500px]">
                     <thead>
-                      <tr className="bg-[#161F38] text-xs font-bold text-[#00F5D4] border-b border-[#00F5D4]/20">
+                      <tr className="bg-slate-950/60 text-xs font-bold text-teal-400 border-b border-slate-800">
                         <th className="p-4">التاريخ</th>
                         <th className="p-4">المسؤول</th>
                         <th className="p-4">الرسائل المضافة</th>
@@ -1277,16 +1283,16 @@ export default function MediaDashboard() {
                         {currentUser.role === 'admin' && <th className="p-4 text-center">إجراء</th>}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800 text-sm">
+                    <tbody className="divide-y divide-slate-800/60 text-sm">
                       {socialLogs.map(log => (
-                        <tr key={log.id} className="hover:bg-[#161F38]">
+                        <tr key={log.id} className="hover:bg-slate-800/30">
                           <td className="p-4 font-bold text-white">📅 {log.date}</td>
-                          <td className="p-4 text-xs text-gray-300">{log.responder}</td>
+                          <td className="p-4 text-xs text-slate-300">{log.responder}</td>
                           <td className="p-4 text-cyan-400 font-bold">➕ {log.messagesCount} رسالة جديدة</td>
                           <td className="p-4 text-teal-400 font-bold">➕ {log.commentsCount} تعليق جديد</td>
                           {currentUser.role === 'admin' && (
                             <td className="p-4 text-center">
-                              <button onClick={() => handleDeleteSocialLog(log.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
+                              <button onClick={() => handleDeleteSocialLog(log.id)} className="px-3 py-1 bg-rose-950/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-bold">🗑️ حذف</button>
                             </td>
                           )}
                         </tr>
@@ -1300,20 +1306,20 @@ export default function MediaDashboard() {
 
           {activeTab === 'إدارة الفريق' && (
             <div className="space-y-6 max-w-5xl mx-auto">
-              <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 rounded-2xl shadow flex justify-between items-center">
-                <h2 className="text-xl font-bold text-[#00F5D4]">👥 إدارة أعضاء فريق شعبة الإعلام</h2>
+              <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-xl flex justify-between items-center">
+                <h2 className="text-xl font-bold text-white">👥 إدارة أعضاء فريق شعبة الإعلام</h2>
                 {currentUser.role === 'admin' && (
-                  <span className="text-xs text-amber-300 bg-amber-950/60 px-3 py-1 rounded border border-amber-800">صلاحيات الأدمن مفعلة (إضافة وتعديل وحذف) ⚡</span>
+                  <span className="text-xs text-amber-300 bg-amber-950/60 px-3 py-1.5 rounded-xl border border-amber-800/50 font-semibold">صلاحيات الأدمن مفعلة ⚡</span>
                 )}
               </div>
 
               {currentUser.role === 'admin' && (
-                <div className="bg-[#161F38] border border-[#00F5D4]/30 p-6 rounded-2xl shadow space-y-4">
+                <div className="bg-slate-900/90 border border-teal-500/20 p-6 rounded-3xl shadow-xl space-y-4">
                   <h3 className="text-base font-bold text-white">{editingMemberKey ? '✏️ تعديل بيانات العضو' : '➕ إضافة عضو جديد للفريق'}</h3>
                   <form onSubmit={handleSaveTeamMember} className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    <input type="text" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} placeholder="الاسم الكامل..." className="px-4 py-2 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
-                    <input type="text" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)} placeholder="اسم المستخدم (Login)..." className="px-4 py-2 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" />
-                    <select value={newMemberRole} onChange={(e) => setNewMemberRole(e.target.value)} className="px-4 py-2 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none">
+                    <input type="text" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} placeholder="الاسم الكامل..." className="px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400" required />
+                    <input type="text" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)} placeholder="اسم المستخدم (Login)..." className="px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400" />
+                    <select value={newMemberRole} onChange={(e) => setNewMemberRole(e.target.value)} className="px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400">
                       <option value="editor">محرر</option>
                       <option value="cameraman">مصور</option>
                       <option value="designer">مصمم</option>
@@ -1324,13 +1330,13 @@ export default function MediaDashboard() {
                       <option value="admin">مسؤول (أدمن)</option>
                       <option value="hr">مسؤول الذاتية (HR)</option>
                     </select>
-                    <input type="password" value={newMemberPass} onChange={(e) => setNewMemberPass(e.target.value)} placeholder="كلمة المرور..." className="px-4 py-2 bg-white text-gray-900 font-semibold rounded-xl text-sm outline-none" required />
-                    <button type="submit" className="bg-[#00F5D4] text-[#0B132B] font-black py-2 rounded-xl text-sm shadow">
+                    <input type="password" value={newMemberPass} onChange={(e) => setNewMemberPass(e.target.value)} placeholder="كلمة المرور..." className="px-4 py-3 bg-slate-950 border border-slate-800 text-white rounded-xl text-sm focus:outline-none focus:border-teal-400" required />
+                    <button type="submit" className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold py-3 rounded-xl text-sm shadow-lg shadow-teal-500/10 transition">
                       {editingMemberKey ? 'حفظ التعديل 💾' : 'إضافة العضو 👤'}
                     </button>
                   </form>
                   {editingMemberKey && (
-                    <button onClick={() => { setEditingMemberKey(null); setNewMemberName(''); setNewMemberUsername(''); setNewMemberPass(''); }} className="text-xs text-red-400 underline">
+                    <button onClick={() => { setEditingMemberKey(null); setNewMemberName(''); setNewMemberUsername(''); setNewMemberPass(''); }} className="text-xs text-rose-400 underline">
                       إلغاء التعديل
                     </button>
                   )}
@@ -1341,16 +1347,16 @@ export default function MediaDashboard() {
                 {Object.entries(employeeAccounts).map(([key, acc]) => {
                   if (key === 'hazem') return null;
                   return (
-                    <div key={key} className="bg-[#1C2541] border border-[#00F5D4]/20 p-5 rounded-xl shadow flex justify-between items-center">
+                    <div key={key} className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl shadow-lg flex justify-between items-center hover:border-slate-700 transition">
                       <div>
-                        <h3 className="font-black text-white text-base">{acc.name}</h3>
-                        <p className="text-xs text-gray-300 mt-1">الدور: <span className="text-[#00F5D4] font-bold">{acc.role}</span> | اليوزر: <span className="text-amber-300">{key}</span></p>
+                        <h3 className="font-bold text-white text-base">{acc.name}</h3>
+                        <p className="text-xs text-slate-400 mt-1">الدور: <span className="text-teal-400 font-semibold">{acc.role}</span> | اليوزر: <span className="text-amber-300">{key}</span></p>
                       </div>
                       {currentUser.role === 'admin' && (
                         <div className="flex gap-2">
-                          <button onClick={() => handleStartEditMember(key, acc)} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">✏️ تعديل</button>
+                          <button onClick={() => handleStartEditMember(key, acc)} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">✏️ تعديل</button>
                           {key !== 'حازم' && (
-                            <button onClick={() => handleDeleteTeamMember(key)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
+                            <button onClick={() => handleDeleteTeamMember(key)} className="px-3 py-1.5 bg-rose-950/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-bold">🗑️ حذف</button>
                           )}
                         </div>
                       )}
@@ -1363,12 +1369,12 @@ export default function MediaDashboard() {
 
           {activeTab === 'التقارير النهائية' && (
             <div className="space-y-6 max-w-6xl mx-auto">
-              <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 rounded-2xl shadow flex justify-between items-center print:hidden">
+              <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-xl flex justify-between items-center print:hidden">
                 <div>
                   <h2 className="text-lg md:text-xl font-bold text-white">📊 التقرير الشهري النهائي المخصص للطباعة</h2>
-                  <p className="text-xs text-gray-300 mt-1">يضم تفاصيل المواد، وأسماء المتخصصين المحطات الفعلية، وإجمالي الرد على التواصل الاجتماعي.</p>
+                  <p className="text-xs text-slate-400 mt-1">يضم تفاصيل المواد، وأسماء المتخصصين المحطات الفعلية، وإجمالي الرد على التواصل الاجتماعي.</p>
                 </div>
-                <button onClick={() => window.print()} className="bg-gradient-to-r from-[#00F5D4] to-[#4EA8DE] text-[#0B132B] px-6 py-2.5 rounded-xl font-black text-xs shadow flex items-center gap-2">
+                <button onClick={() => window.print()} className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-300 hover:to-cyan-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-xs shadow-lg shadow-teal-500/20 flex items-center gap-2 transition">
                   <span>🖨️</span> طباعة التقرير الشهري
                 </button>
               </div>
@@ -1386,34 +1392,34 @@ export default function MediaDashboard() {
                   { label: 'العمليات الجراحية', count: countByType('العمليات الجراحية') },
                   { label: 'إجمالي المنجز', count: archivedTasks.length }
                 ].map((item, idx) => (
-                  <div key={idx} className="bg-[#1C2541] border border-[#00F5D4]/30 p-4 rounded-xl flex justify-between items-center shadow">
-                    <span className="text-xs font-bold text-gray-200">{item.label}</span>
-                    <span className="text-xl font-black text-[#00F5D4]">{item.count}</span>
+                  <div key={idx} className="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex justify-between items-center shadow-lg">
+                    <span className="text-xs font-semibold text-slate-300">{item.label}</span>
+                    <span className="text-xl font-bold text-teal-400">{item.count}</span>
                   </div>
                 ))}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:hidden">
-                <div className="bg-[#1C2541] border border-[#00F5D4]/30 p-6 rounded-2xl shadow flex justify-between items-center">
+                <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-lg flex justify-between items-center">
                   <div>
-                    <span className="text-xs font-bold text-gray-300">إجمالي الرسائل المردود عليها</span>
+                    <span className="text-xs font-bold text-slate-400">إجمالي الرسائل المردود عليها</span>
                     <p className="text-3xl font-black text-cyan-400 mt-2">{totalMessages} رسالة</p>
                   </div>
-                  <span className="text-3xl">💬</span>
+                  <span className="text-3xl p-3 bg-cyan-500/10 rounded-2xl">💬</span>
                 </div>
-                <div className="bg-[#1C2541] border border-[#00F5D4]/30 p-6 rounded-2xl shadow flex justify-between items-center">
+                <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-lg flex justify-between items-center">
                   <div>
-                    <span className="text-xs font-bold text-gray-300">إجمالي التعليقات المردود عليها</span>
+                    <span className="text-xs font-bold text-slate-400">إجمالي التعليقات المردود عليها</span>
                     <p className="text-3xl font-black text-teal-400 mt-2">{totalComments} تعليق</p>
                   </div>
-                  <span className="text-3xl">✍️</span>
+                  <span className="text-3xl p-3 bg-teal-500/10 rounded-2xl">✍️</span>
                 </div>
               </div>
 
-              <div className="bg-[#1C2541] print:bg-white border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
-                <table className="w-full text-right border-collapse print:text-gray-900 min-w-[800px]">
+              <div className="bg-slate-900/80 print:bg-white border border-slate-800 rounded-3xl overflow-x-auto shadow-xl">
+                <table className="w-full text-right border-collapse print:text-slate-900 min-w-[800px]">
                   <thead>
-                    <tr className="bg-[#161F38] print:bg-gray-200 text-xs font-bold text-[#00F5D4] border-b">
+                    <tr className="bg-slate-950/60 print:bg-slate-200 text-xs font-bold text-teal-400 border-b border-slate-800">
                       <th className="p-4">اسم المادة</th>
                       <th className="p-4">النوع</th>
                       <th className="p-4">تفاصيل فريق العمل (المحطات الفعلية)</th>
@@ -1421,7 +1427,7 @@ export default function MediaDashboard() {
                       <th className="p-4 text-center print:hidden">أزرار التحكم</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800 text-sm">
+                  <tbody className="divide-y divide-slate-800/60 text-sm">
                     {archivedTasks.map(task => {
                       const canManageReport = canEditReports();
                       const platformsObj = task.publishPlatforms || { facebook: true };
@@ -1439,12 +1445,12 @@ export default function MediaDashboard() {
                         }).join('، ');
 
                       return (
-                        <tr key={task.id} className="hover:bg-[#161F38]">
-                          <td className="p-4 font-bold">{task.title}</td>
+                        <tr key={task.id} className="hover:bg-slate-800/30">
+                          <td className="p-4 font-bold text-white print:text-slate-900">{task.title}</td>
                           <td className="p-4">
-                            <span className="bg-emerald-950 text-emerald-300 px-2 py-1 rounded text-xs font-bold">{task.contentType}</span>
+                            <span className="bg-emerald-950/60 text-emerald-300 border border-emerald-800/40 px-2.5 py-1 rounded-xl text-xs font-bold">{task.contentType}</span>
                           </td>
-                          <td className="p-4 text-xs space-y-1">
+                          <td className="p-4 text-xs space-y-1 text-slate-300 print:text-slate-800">
                             {task.cameraman && <div>📸 التصوير: {task.cameraman} ({task.cameramanDate || task.addDate})</div>}
                             {task.videoChecker && <div>🎥 التدقيق الفيديوي: {task.videoChecker} ({task.videoCheckerDate || task.addDate})</div>}
                             {task.editorName && <div>✍️ التحرير: {task.editorName} ({task.editorDate || task.addDate})</div>}
@@ -1452,24 +1458,24 @@ export default function MediaDashboard() {
                             {task.montageName && <div>🎬 المونتاج: {task.montageName} ({task.montageDate || task.addDate})</div>}
                             {task.checkerName && <div>✔ التدقيق النهائي: {task.checkerName} ({task.checkerDate})</div>}
                             {task.publisherName && <div>🚀 النشر: {task.publisherName} ({task.publisherDate || task.addDate}) [{task.publishState || 'نشر'}]</div>}
-                            {activePlatforms && <div className="text-cyan-300 mt-1">🌐 المنصات: {activePlatforms}</div>}
-                            {task.notes && <div className="text-amber-300 mt-1">📝 ملاحظات: {task.notes}</div>}
+                            {activePlatforms && <div className="text-cyan-400 print:text-cyan-700 mt-1">🌐 المنصات: {activePlatforms}</div>}
+                            {task.notes && <div className="text-amber-300 print:text-amber-700 mt-1">📝 ملاحظات: {task.notes}</div>}
                           </td>
-                          <td className="p-4 text-[#00F5D4] text-xs underline">
+                          <td className="p-4 text-teal-400 text-xs underline">
                             {task.publishLink ? <a href={task.publishLink} target="_blank" rel="noreferrer">رابط النشر</a> : 'بدون رابط'}
                           </td>
                           <td className="p-4 text-center print:hidden">
                             <div className="flex justify-center gap-2">
-                              <button onClick={() => setViewingTask(task)} className="px-3 py-1 bg-blue-950 text-blue-300 border border-blue-800 rounded-lg text-xs font-bold">👁️ فتح</button>
+                              <button onClick={() => setViewingTask(task)} className="px-3 py-1.5 bg-blue-950/60 text-blue-300 border border-blue-800/50 rounded-xl text-xs font-bold">👁️ فتح</button>
                               {canManageReport ? (
                                 <>
-                                  <button onClick={() => handleStageAction(task.id, 'منجز ومؤرشف', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">🔄 استرجاع</button>
+                                  <button onClick={() => handleStageAction(task.id, 'منجز ومؤرشف', 'return')} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">🔄 استرجاع</button>
                                   {currentUser.role === 'admin' && (
-                                    <button onClick={() => handleDeleteTask(task.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️️ حذف</button>
+                                    <button onClick={() => handleDeleteTask(task.id)} className="px-3 py-1.5 bg-rose-950/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-bold">🗑️ حذف</button>
                                   )}
                                 </>
                               ) : (
-                                <span className="text-[10px] text-gray-500 font-bold px-2 py-1 bg-gray-900 rounded border border-gray-800">مشاهدة فقط 🔒</span>
+                                <span className="text-[10px] text-slate-500 font-bold px-2.5 py-1 bg-slate-950 rounded-xl border border-slate-800">قفل 🔒</span>
                               )}
                             </div>
                           </td>
@@ -1485,7 +1491,7 @@ export default function MediaDashboard() {
           {activeTab === 'النسخ الاحتياطي' && (
             <div className="space-y-6 max-w-xl mx-auto">
               {currentUser.role === 'admin' ? (
-                <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-8 rounded-2xl shadow text-center space-y-6">
+                <div className="bg-slate-900/80 border border-slate-800 p-8 rounded-3xl shadow-xl text-center space-y-6">
                   <h2 className="text-xl font-bold text-white">النسخ الاحتياطي السحابي</h2>
                   <button onClick={() => {
                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ tasks, socialLogs, employeeAccounts }, null, 2));
@@ -1495,12 +1501,12 @@ export default function MediaDashboard() {
                     document.body.appendChild(downloadAnchor);
                     downloadAnchor.click();
                     downloadAnchor.remove();
-                  }} className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-bold text-sm shadow">
+                  }} className="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-2xl font-bold text-sm shadow transition border border-slate-700">
                     تصدير نسخة احتياطية محلية (JSON) 💾
                   </button>
                 </div>
               ) : (
-                <div className="p-8 text-center bg-[#1C2541] rounded-xl text-gray-400 font-bold text-sm">
+                <div className="p-8 text-center bg-slate-900/80 rounded-3xl text-slate-400 font-bold text-sm border border-slate-800">
                   🔒 هذا القسم مخصص لمدير النظام (الأدمن) فقط.
                 </div>
               )}
@@ -1511,13 +1517,13 @@ export default function MediaDashboard() {
       </main>
 
       {viewingTask && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#1C2541] border border-[#00F5D4]/40 p-6 rounded-2xl w-full max-w-lg space-y-4 text-white">
-            <div className="flex justify-between items-center border-b border-[#00F5D4]/20 pb-3">
-              <h3 className="text-lg font-black text-[#00F5D4]">تفاصيل المادة الأرشفية</h3>
-              <button onClick={() => setViewingTask(null)} className="text-gray-400 hover:text-white font-bold">✕</button>
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-900 border border-teal-500/30 p-6 rounded-3xl w-full max-w-lg space-y-4 text-white shadow-2xl">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+              <h3 className="text-lg font-black text-teal-400">تفاصيل المادة الأرشفية</h3>
+              <button onClick={() => setViewingTask(null)} className="text-slate-400 hover:text-white font-bold">✕</button>
             </div>
-            <div className="space-y-2 text-xs">
+            <div className="space-y-2 text-xs text-slate-300">
               <p><strong>عنوان المادة:</strong> {viewingTask.title}</p>
               <p><strong>النوع:</strong> {viewingTask.contentType}</p>
               <p><strong>تاريخ الإضافة:</strong> {viewingTask.addDate}</p>
@@ -1526,7 +1532,7 @@ export default function MediaDashboard() {
               <p><strong>رابط النشر:</strong> {viewingTask.publishLink ? <a href={viewingTask.publishLink} target="_blank" rel="noreferrer" className="text-cyan-400 underline">{viewingTask.publishLink}</a> : 'بدون رابط'}</p>
             </div>
             <div className="flex justify-end pt-2">
-              <button onClick={() => setViewingTask(null)} className="px-4 py-2 bg-[#00F5D4] text-[#0B132B] font-black rounded-xl text-xs">إغلاق</button>
+              <button onClick={() => setViewingTask(null)} className="px-5 py-2 bg-teal-400 text-slate-950 font-bold rounded-xl text-xs shadow-lg shadow-teal-500/10">إغلاق</button>
             </div>
           </div>
         </div>
@@ -1539,9 +1545,9 @@ export default function MediaDashboard() {
 function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTask, currentUser, videoCheckerSelections, setVideoCheckerSelections, isAllowed }) {
   const currentVal = videoCheckerSelections[t.id] || 'طارق جعفر حسين';
   return (
-    <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
+    <tr className={`hover:bg-slate-800/30 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-rose-950/20 border-r-4 border-rose-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
-        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
+        {t.hasError && <span className="bg-rose-500 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ خلل</span>}
         <span>{t.title}</span>
       </td>
       <td className="p-3">
@@ -1549,7 +1555,7 @@ function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
           value={currentVal} 
           onChange={(e) => setVideoCheckerSelections(prev => ({ ...prev, [t.id]: e.target.value }))}
           disabled={!isAllowed}
-          className="px-3 py-1.5 bg-white text-gray-900 font-bold rounded-lg text-xs outline-none disabled:opacity-50"
+          className="px-3 py-1.5 bg-slate-950 border border-slate-800 text-white font-semibold rounded-xl text-xs outline-none disabled:opacity-50"
         >
           <option value="طارق جعفر حسين">طارق جعفر حسين</option>
           <option value="رشا ناجح">رشا ناجح</option>
@@ -1558,16 +1564,16 @@ function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
       <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
         {isAllowed ? (
           <>
-            <button onClick={() => handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">⬅ إرجاع للتصوير</button>
-            <button onClick={() => handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'advance')} className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold">إرسال للتحرير ➡</button>
+            <button onClick={() => handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'return')} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">⬅ إرجاع للتصوير</button>
+            <button onClick={() => handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'advance')} className="px-3 py-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 rounded-xl text-xs font-bold">إرسال للتحرير ➡</button>
           </>
         ) : (
-          <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded border border-gray-800">مشاهدة فقط 🔒</span>
+          <span className="text-xs text-slate-500 font-bold bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">قفل 🔒</span>
         )}
         {currentUser.role === 'admin' && (
           <>
-            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1 bg-blue-950 text-blue-300 border border-blue-800 rounded-lg text-xs font-bold">✏️ تعديل</button>
-            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
+            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1.5 bg-blue-950/60 text-blue-300 border border-blue-800/50 rounded-xl text-xs font-bold">✏️ تعديل</button>
+            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1.5 bg-rose-950/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-bold">🗑️ حذف</button>
           </>
         )}
       </td>
@@ -1578,9 +1584,9 @@ function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
 function FinalCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTask, currentUser, finalCheckerSelections, setFinalCheckerSelections, isAllowed }) {
   const currentVal = finalCheckerSelections[t.id] || 'زهراء صلاح';
   return (
-    <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
+    <tr className={`hover:bg-slate-800/30 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-rose-950/20 border-r-4 border-rose-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
-        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
+        {t.hasError && <span className="bg-rose-500 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️️ خلل</span>}
         <span>{t.title}</span>
       </td>
       <td className="p-3">
@@ -1588,7 +1594,7 @@ function FinalCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
           value={currentVal} 
           onChange={(e) => setFinalCheckerSelections(prev => ({ ...prev, [t.id]: e.target.value }))}
           disabled={!isAllowed}
-          className="px-3 py-1.5 bg-white text-gray-900 font-bold rounded-lg text-xs outline-none disabled:opacity-50"
+          className="px-3 py-1.5 bg-slate-950 border border-slate-800 text-white font-semibold rounded-xl text-xs outline-none disabled:opacity-50"
         >
           <option value="زهراء صلاح">زهراء صلاح</option>
           <option value="رشا ناجح">رشا ناجح</option>
@@ -1597,16 +1603,16 @@ function FinalCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
       <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
         {isAllowed ? (
           <>
-            <button onClick={() => handleStageAction(t.id, '6. التدقيق النهائي', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">⬅ إرجاع للسابق</button>
-            <button onClick={() => handleStageAction(t.id, '6. التدقيق النهائي', 'advance')} className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold">إرسال للنشر ➡</button>
+            <button onClick={() => handleStageAction(t.id, '6. التدقيق النهائي', 'return')} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">⬅ إرجاع للسابق</button>
+            <button onClick={() => handleStageAction(t.id, '6. التدقيق النهائي', 'advance')} className="px-3 py-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 rounded-xl text-xs font-bold">إرسال للنشر ➡</button>
           </>
         ) : (
-          <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded border border-gray-800">مشاهدة فقط 🔒</span>
+          <span className="text-xs text-slate-500 font-bold bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">قفل 🔒</span>
         )}
         {currentUser.role === 'admin' && (
           <>
-            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1 bg-blue-950 text-blue-300 border border-blue-800 rounded-lg text-xs font-bold">✏️ تعديل</button>
-            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
+            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1.5 bg-blue-950/60 text-blue-300 border border-blue-800/50 rounded-xl text-xs font-bold">✏️ تعديل</button>
+            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1.5 bg-rose-950/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-bold">🗑️ حذف</button>
           </>
         )}
       </td>
@@ -1640,15 +1646,15 @@ function PublishRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTas
   };
 
   return (
-    <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
+    <tr className={`hover:bg-slate-800/30 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-rose-950/20 border-r-4 border-rose-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
-        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
+        {t.hasError && <span className="bg-rose-500 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ خلل</span>}
         <span>{t.title}</span>
       </td>
       <td className="p-3 text-xs space-y-3">
         <div>
-          <span className="text-gray-300 font-bold block mb-1">اختر منصات النشر:</span>
-          <div className="grid grid-cols-2 gap-2 bg-[#0B132B] p-2 rounded-lg border border-[#00F5D4]/20">
+          <span className="text-slate-300 font-semibold block mb-1">اختر منصات النشر:</span>
+          <div className="grid grid-cols-2 gap-2 bg-slate-950 p-2.5 rounded-xl border border-slate-800">
             {[
               { key: 'facebook', label: 'فيسبوك' },
               { key: 'instagram', label: 'انستغرام' },
@@ -1658,13 +1664,13 @@ function PublishRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTas
               { key: 'x', label: 'منصة إكس' },
               { key: 'website', label: 'الموقع الإلكتروني' }
             ].map(p => (
-              <label key={p.key} className="flex items-center gap-2 cursor-pointer text-gray-200">
+              <label key={p.key} className="flex items-center gap-2 cursor-pointer text-slate-300">
                 <input 
                   type="checkbox" 
                   checked={!!platforms[p.key]} 
                   onChange={() => handlePlatformChange(p.key)}
                   disabled={!isAllowed}
-                  className="w-4 h-4 accent-[#00F5D4]"
+                  className="w-4 h-4 accent-teal-400 rounded"
                 />
                 <span>{p.label}</span>
               </label>
@@ -1673,8 +1679,8 @@ function PublishRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTas
         </div>
 
         <div className="flex gap-2 items-center">
-          <span className="text-gray-300">الحالة:</span>
-          <select value={pubState} onChange={(e) => setPubState(e.target.value)} disabled={!isAllowed} className="px-2 py-1 bg-white text-gray-900 font-bold rounded text-xs">
+          <span className="text-slate-300 font-semibold">الحالة:</span>
+          <select value={pubState} onChange={(e) => setPubState(e.target.value)} disabled={!isAllowed} className="px-3 py-1.5 bg-slate-950 border border-slate-800 text-white font-semibold rounded-xl text-xs outline-none">
             <option value="نشر">نشر ✅</option>
             <option value="لم ينشر">لم ينشر ❌</option>
             <option value="قيد النشر">قيد النشر ⏳</option>
@@ -1682,16 +1688,16 @@ function PublishRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTas
         </div>
 
         <div className="flex gap-2 items-center">
-          <span className="text-gray-300">التاريخ:</span>
-          <input type="date" value={pubDate} onChange={(e) => setPubDate(e.target.value)} disabled={!isAllowed} className="px-2 py-1 bg-white text-gray-900 font-bold rounded text-xs" style={{ colorScheme: 'light' }} />
+          <span className="text-slate-300 font-semibold">التاريخ:</span>
+          <input type="date" value={pubDate} onChange={(e) => setPubDate(e.target.value)} disabled={!isAllowed} className="px-3 py-1.5 bg-slate-950 border border-slate-800 text-white font-semibold rounded-xl text-xs outline-none" style={{ colorScheme: 'dark' }} />
         </div>
 
         <div>
-          <input type="text" value={pubLink} onChange={(e) => setPubLink(e.target.value)} placeholder="أدخل رابط النشر هنا..." disabled={!isAllowed} className="w-full px-2 py-1 bg-white text-gray-900 rounded text-xs outline-none" />
+          <input type="text" value={pubLink} onChange={(e) => setPubLink(e.target.value)} placeholder="أدخل رابط النشر هنا..." disabled={!isAllowed} className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 text-white rounded-xl text-xs outline-none" />
         </div>
 
         {isAllowed && (
-          <button onClick={() => handleSavePublishInfo(t.id)} className="px-3 py-1.5 bg-blue-900 text-blue-200 rounded font-bold text-[10px] shadow">حفظ بيانات النشر 💾</button>
+          <button onClick={() => handleSavePublishInfo(t.id)} className="px-3.5 py-1.5 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-xl font-bold text-[10px] shadow transition">حفظ بيانات النشر 💾</button>
         )}
       </td>
       <td className="p-3 text-xs text-amber-300">
@@ -1700,16 +1706,16 @@ function PublishRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTas
       <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
         {isAllowed ? (
           <>
-            <button onClick={() => handleStageAction(t.id, '7. النشر', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">⬅ إرجاع للتدقيق</button>
-            <button onClick={() => handleStageAction(t.id, '7. النشر', 'advance', { publishPlatforms: platforms, publishState: pubState, publishLink: pubLink, publisherDate: pubDate })} className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold">إرسال للأرشيف ➡</button>
+            <button onClick={() => handleStageAction(t.id, '7. النشر', 'return')} className="px-3 py-1.5 bg-amber-950/60 text-amber-300 border border-amber-800/50 rounded-xl text-xs font-bold">⬅ إرجاع للتدقيق</button>
+            <button onClick={() => handleStageAction(t.id, '7. النشر', 'advance', { publishPlatforms: platforms, publishState: pubState, publishLink: pubLink, publisherDate: pubDate })} className="px-3 py-1.5 bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 rounded-xl text-xs font-bold">إرسال للأرشيف ➡</button>
           </>
         ) : (
-          <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded border border-gray-800">مشاهدة فقط 🔒</span>
+          <span className="text-xs text-slate-500 font-bold bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">قفل 🔒</span>
         )}
         {currentUser.role === 'admin' && (
           <>
-            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1 bg-blue-950 text-blue-300 border border-blue-800 rounded-lg text-xs font-bold">✏️ تعديل</button>
-            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
+            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1.5 bg-blue-950/60 text-blue-300 border border-blue-800/50 rounded-xl text-xs font-bold">✏️ تعديل</button>
+            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1.5 bg-rose-950/60 text-rose-300 border border-rose-800/50 rounded-xl text-xs font-bold">🗑️ حذف</button>
           </>
         )}
       </td>
