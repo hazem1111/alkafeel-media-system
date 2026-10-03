@@ -37,7 +37,6 @@ export default function MediaDashboard() {
   const [videoCheckerSelections, setVideoCheckerSelections] = useState({});
   const [finalCheckerSelections, setFinalCheckerSelections] = useState({});
 
-  // حقول الإضافة المباشرة من قسم النشر (محدثة بالأنواع المطلوبة: إعلام طبي، إعلان مركز، CV طبيب، نصيحة، أخبار...)
   const [directPubTitle, setDirectPubTitle] = useState('');
   const [directPubType, setDirectPubType] = useState('أخبار');
   const [directPubDate, setDirectPubDate] = useState(new Date().toISOString().split('T')[0]);
@@ -53,7 +52,6 @@ export default function MediaDashboard() {
   });
   const [directPubNotes, setDirectPubNotes] = useState('');
 
-  // حقول الإضافة للمصور والمحرر والمصمم والمونتير
   const [newTitle, setNewTitle] = useState('');
   const [newContentType, setNewContentType] = useState('خبر');
   const [newShootType, setNewShootType] = useState('فيديو');
@@ -302,7 +300,6 @@ export default function MediaDashboard() {
     alert("تم إضافة المونتاج وتوجيهه للتدقيق النهائي بنجاح.");
   };
 
-  // إرسال النشر المباشر (إعلام طبي، إعلان مركز، CV طبيب، نصيحة، أخبار...)
   const handleDirectPublishSubmit = (e) => {
     e.preventDefault();
     if (!canEditSection('publisher')) { alert("هذا القسم مخصص لفريق النشر فقط!"); return; }
@@ -597,7 +594,6 @@ export default function MediaDashboard() {
   return (
     <div className="min-h-screen bg-[#0B132B] text-gray-100 flex flex-col md:flex-row font-sans select-none" dir="rtl">
       
-      {/* رأس الشاشة للموبايل */}
       <div className="md:hidden bg-[#1C2541] p-4 flex justify-between items-center border-b border-[#00F5D4]/20">
         <span className="text-[#00F5D4] font-black text-sm">إدارة الإعلام المركزي</span>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="bg-[#0B132B] text-[#00F5D4] px-3 py-1.5 rounded-lg border border-[#00F5D4]/40 text-xs font-bold">
@@ -605,7 +601,6 @@ export default function MediaDashboard() {
         </button>
       </div>
 
-      {/* القائمة الجانبية المتجاوبة */}
       <aside className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:flex w-full md:w-72 bg-[#1C2541] border-l border-[#00F5D4]/25 flex-col justify-between shadow-2xl print:hidden`}>
         <div>
           <div className="p-6 border-b border-[#00F5D4]/20 space-y-3 text-center">
@@ -647,7 +642,6 @@ export default function MediaDashboard() {
         </div>
       </aside>
 
-      {/* المحتوى الرئيسي */}
       <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-[#0B132B]">
         
         <header className="hidden md:flex bg-[#1C2541] px-8 py-4 border-b border-[#00F5D4]/20 justify-between items-center shadow-sm print:hidden">
@@ -692,7 +686,7 @@ export default function MediaDashboard() {
                   {[
                     { label: 'أخبار', count: countByType('أخبار'), color: 'text-blue-300' },
                     { label: 'إعلام طبي', count: countByType('إعلام طبي'), color: 'text-emerald-300' },
-                    { label: 'إعلان مركز', count: countByType('إعلان مركز') + countByType('إعلان طبي'), color: 'text-teal-300' },
+                    { label: 'إعلان مركز', count: countByType('إعلان مركز') + countByType('إعلام طبي'), color: 'text-teal-300' },
                     { label: 'نصيحة طبية', count: countByType('نصيحة طبية'), color: 'text-purple-300' },
                     { label: 'CV طبيب', count: countByType('CV طبيب') + countByType('معلومات عامة'), color: 'text-cyan-300' },
                     { label: 'كاروسيل', count: countByType('كاروسيل'), color: 'text-orange-300' },
@@ -858,7 +852,6 @@ export default function MediaDashboard() {
                 </div>
               )}
 
-              {/* جدول عرض المواد الواردة إلى قسم التحرير */}
               <div className="space-y-4 pt-4">
                 <h3 className="font-bold text-white text-base">المواد الواردة إلى قسم التحرير</h3>
                 <div className="bg-[#1C2541] border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
@@ -950,7 +943,6 @@ export default function MediaDashboard() {
                 </div>
               )}
 
-              {/* جدول عرض المواد الواردة إلى قسم التصميم */}
               <div className="space-y-4 pt-4">
                 <h3 className="font-bold text-white text-base">المواد الواردة إلى قسم التصميم</h3>
                 <div className="bg-[#1C2541] border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
@@ -1039,7 +1031,6 @@ export default function MediaDashboard() {
                 </div>
               )}
 
-              {/* جدول عرض المواد الواردة إلى قسم المونتاج */}
               <div className="space-y-4 pt-4">
                 <h3 className="font-bold text-white text-base">المواد الواردة إلى قسم المونتاج</h3>
                 <div className="bg-[#1C2541] border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
@@ -1136,10 +1127,9 @@ export default function MediaDashboard() {
 
           {activeTab === '7. النشر' && (
             <div className="space-y-8">
-              {/* نموذج إضافة مادة جديدة مباشرة من قسم النشر (محدث بالأنواع المنفصلة) */}
               {canEditSection('publisher') && (
                 <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6 max-w-3xl mx-auto">
-                  <h2 className="text-lg md:text-xl font-bold text-white">🚀 قسم النشر: إضافة وإعادة نشر مادة جاهزة (أخبار، إعلام طبي، إعلان مركز، CV طبيب، نصيحة...)</h2>
+                  <h2 className="text-lg md:text-xl font-bold text-white">🚀 قسم النشر: إضافة وإعادة نشر مادة جاهزة</h2>
                   <form onSubmit={handleDirectPublishSubmit} className="space-y-4">
                     <div>
                       <label className="block text-gray-200 font-bold mb-1 text-sm">اسم المادة / العنوان *</label>
@@ -1207,7 +1197,6 @@ export default function MediaDashboard() {
                 </div>
               )}
 
-              {/* جدول متابعة مواد النشر */}
               <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 rounded-2xl space-y-4 shadow">
                 <h2 className="text-lg font-bold text-[#00F5D4]">متابعة مواد قسم النشر</h2>
                 <div className="bg-[#0B132B] p-4 rounded-xl border border-[#00F5D4]/20 overflow-x-auto">
@@ -1384,12 +1373,11 @@ export default function MediaDashboard() {
                 </button>
               </div>
 
-              {/* البطاقات الإحصائية المحدثة حسب الأنواع المنفصلة المطلوبة */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 print:hidden">
                 {[
                   { label: 'أخبار', count: countByType('أخبار') },
                   { label: 'إعلام طبي', count: countByType('إعلام طبي') },
-                  { label: 'إعلان مركز', count: countByType('إعلان مركز') + countByType('إعلان طبي') },
+                  { label: 'إعلان مركز', count: countByType('إعلان مركز') + countByType('إعلام طبي') },
                   { label: 'نصيحة طبية', count: countByType('نصيحة طبية') },
                   { label: 'CV طبيب', count: countByType('CV طبيب') + countByType('معلومات عامة') },
                   { label: 'كاروسيل', count: countByType('كاروسيل') },
@@ -1405,7 +1393,6 @@ export default function MediaDashboard() {
                 ))}
               </div>
 
-              {/* بطاقات الرسائل والتعليقات الكلية */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:hidden">
                 <div className="bg-[#1C2541] border border-[#00F5D4]/30 p-6 rounded-2xl shadow flex justify-between items-center">
                   <div>
@@ -1423,7 +1410,6 @@ export default function MediaDashboard() {
                 </div>
               </div>
 
-              {/* جدول التقرير النهائي */}
               <div className="bg-[#1C2541] print:bg-white border border-[#00F5D4]/20 rounded-2xl overflow-x-auto shadow">
                 <table className="w-full text-right border-collapse print:text-gray-900 min-w-[800px]">
                   <thead>
@@ -1479,7 +1465,7 @@ export default function MediaDashboard() {
                                 <>
                                   <button onClick={() => handleStageAction(task.id, 'منجز ومؤرشف', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">🔄 استرجاع</button>
                                   {currentUser.role === 'admin' && (
-                                    <button onClick={() => handleDeleteTask(task.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
+                                    <button onClick={() => handleDeleteTask(task.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️️ حذف</button>
                                   )}
                                 </>
                               ) : (
@@ -1524,7 +1510,6 @@ export default function MediaDashboard() {
         </div>
       </main>
 
-      {/* نافذة عرض تفاصيل المادة */}
       {viewingTask && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
           <div className="bg-[#1C2541] border border-[#00F5D4]/40 p-6 rounded-2xl w-full max-w-lg space-y-4 text-white">
