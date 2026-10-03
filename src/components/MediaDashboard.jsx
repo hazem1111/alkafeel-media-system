@@ -13,8 +13,25 @@ export default function MediaDashboard() {
   const [loginPassword, setLoginPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
 
-  const [tasks, setTasks] = useState([]);
-  const [socialLogs, setSocialLogs] = useState([]);
+  // تحميل البيانات من التخزين المؤقت المحلي (LocalStorage) أولاً كاحتياط فوري، ثم المزامنة مع السيرفر
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const localTasks = localStorage.getItem('alkafeel_media_tasks_backup');
+      if (localTasks) return JSON.parse(localTasks);
+    } catch(e) { console.error(e); }
+    return [];
+  });
+
+  const [socialLogs, setSocialLogs] = useState(() => {
+    try {
+      const localSocial = localStorage.getItem('alkafeel_media_social_backup');
+      if (localSocial) return JSON.parse(localSocial);
+    } catch(e) { console.error(e); }
+    return [];
+  });
+
+  const [syncStatus, setSyncStatus] = useState('متصل بالسيرفر السحابي ☁️'); // مؤشر مرئي لحالة الحفظ والاتصال
+
   const [employeeAccounts, setEmployeeAccounts] = useState({
     'حازم': { name: 'المهندس حازم فاضل الأسدي', role: 'admin', pass: 'JUVEjuve12' },
     'طارق': { name: 'طارق جعفر حسين', role: 'editor', pass: 'tariq123' },
@@ -89,36 +106,46 @@ export default function MediaDashboard() {
     fetch('/api/data')
       .then(res => res.json())
       .then(data => {
-        if (data && data.tasks && Array.isArray(data.tasks)) setTasks(data.tasks);
-        else setTasks([
-          { 
-            id: 1, 
-            title: 'تغطية عملية زراعة الكلى المعقدة', 
-            contentType: 'العمليات الجراحية', 
-            shootType: 'فيديو', 
-            addDate: '2026-10-01',
-            cameraman: 'حيدر ضياء جابر',
-            cameramanDate: '01-10-2026',
-            videoChecker: 'طارق جعفر حسين',
-            videoCheckerDate: '01-10-2026',
-            editorName: 'طارق جعفر حسين',
-            editorDate: '01-10-2026',
-            designerName: 'علي صالح مشحوف',
-            designerDate: '01-10-2026',
-            checkerName: 'زهراء صلاح',
-            checkerDate: '01-10-2026',
-            publisherName: 'فريق النشر',
-            publisherDate: '01-10-2026',
-            publishPlatforms: { facebook: true, telegram: true },
-            publishState: 'نشر',
-            stage: 'منجز ومؤرشف', 
-            progress: 100,
-            hasError: false,
-            notes: 'عمل ممتاز'
-          }
-        ]);
+        if (data && data.tasks && Array.isArray(data.tasks)) {
+          setTasks(data.tasks);
+          localStorage.setItem('alkafeel_media_tasks_backup', JSON.stringify(data.tasks));
+        } else if (tasks.length === 0) {
+          const defaultTasks = [
+            { 
+              id: 1, 
+              title: 'تغطية عملية زراعة الكلى المعقدة', 
+              contentType: 'العمليات الجراحية', 
+              shootType: 'فيديو', 
+              addDate: '2026-10-01',
+              cameraman: 'حيدر ضياء جابر',
+              cameramanDate: '01-10-2026',
+              videoChecker: 'طارق جعفر حسين',
+              videoCheckerDate: '01-10-2026',
+              editorName: 'طارق جعفر حسين',
+              editorDate: '01-10-2026',
+              designerName: 'علي صالح مشحوف',
+              designerDate: '01-10-2026',
+              checkerName: 'زهراء صلاح',
+              checkerDate: '01-10-2026',
+              publisherName: 'فريق النشر',
+              publisherDate: '01-10-2026',
+              publishPlatforms: { facebook: true, telegram: true },
+              publishState: 'نشر',
+              stage: 'منجز ومؤرشف', 
+              progress: 100,
+              hasError: false,
+              notes: 'عمل ممتاز'
+            }
+          ];
+          setTasks(defaultTasks);
+          localStorage.setItem('alkafeel_media_tasks_backup', JSON.stringify(defaultTasks));
+        }
 
-        if (data && data.socialLogs && Array.isArray(data.socialLogs)) setSocialLogs(data.socialLogs);
+        if (data && data.socialLogs && Array.isArray(data.socialLogs)) {
+          setSocialLogs(data.socialLogs);
+          localStorage.setItem('alkafeel_media_social_backup', JSON.stringify(data.socialLogs));
+        }
+
         if (data && data.employeeAccounts && typeof data.employeeAccounts === 'object') {
           const cleanedAccounts = { ...data.employeeAccounts };
           delete cleanedAccounts['hazem'];
@@ -127,23 +154,42 @@ export default function MediaDashboard() {
         setIsLoading(false);
       })
       .catch(err => {
-        console.error("فشل الاتصال بالسيرفر:", err);
+        console.error("فشل الاتصال بالسيرفر، وتم الاعتماد على التخزين الاحتياطي المحلي:", err);
+        setSyncStatus('وضع عدم الاتصال — تم تفعيل التخزين المحلي ⚠️');
         setIsLoading(false);
       });
   }, []);
 
+  // دالة المزامنة المحدثة مع التخزين المحلي الاحتياطي
   const syncWithServer = (updatedTasks, updatedSocial, updatedAccounts) => {
+    const finalTasks = updatedTasks !== undefined ? updatedTasks : tasks;
+    const finalSocial = updatedSocial !== undefined ? updatedSocial : socialLogs;
+    const finalAccounts = updatedAccounts !== undefined ? updatedAccounts : employeeAccounts;
+
+    // حفظ فوري في التخزين المؤقت المحلي (LocalStorage Backup) لحماية البيانات
+    try {
+      localStorage.setItem('alkafeel_media_tasks_backup', JSON.stringify(finalTasks));
+      localStorage.setItem('alkafeel_media_social_backup', JSON.stringify(finalSocial));
+    } catch(e) { console.error(e); }
+
+    setSyncStatus('جاري الحفظ سحابياً... 🔄');
+
     const payload = {
-      tasks: updatedTasks !== undefined ? updatedTasks : tasks,
-      socialLogs: updatedSocial !== undefined ? updatedSocial : socialLogs,
-      employeeAccounts: updatedAccounts !== undefined ? updatedAccounts : employeeAccounts
+      tasks: finalTasks,
+      socialLogs: finalSocial,
+      employeeAccounts: finalAccounts
     };
 
     fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
-    }).catch(err => console.error("خطأ في الحفظ السحابي:", err));
+    })
+    .then(() => setSyncStatus('متصل بالسيرفر السحابي ☁️ (تم الحفظ ✅)'))
+    .catch(err => {
+      console.error("خطأ في الحفظ السحابي:", err);
+      setSyncStatus('انقطع الاتصال — محفوظ محلياً ⚠️️');
+    });
   };
 
   const handleLogin = (e) => {
@@ -638,7 +684,8 @@ export default function MediaDashboard() {
           <button onClick={handleLogout} className="w-full bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 py-2.5 rounded-xl text-xs font-bold">
             تسجيل الخروج 🚪
           </button>
-          <p className="text-[10px] text-gray-400 text-center">السيرفر السحابي: متصل ✅</p>
+          {/* مؤشر الحالة والمزامنة المضاف حديثاً */}
+          <p className="text-[10px] text-[#00F5D4] text-center font-bold">{syncStatus}</p>
         </div>
       </aside>
 
@@ -650,7 +697,7 @@ export default function MediaDashboard() {
             <p className="text-xs text-gray-300 mt-0.5">النظام السحابي المركزي</p>
           </div>
           <span className="text-xs font-bold text-[#00F5D4] bg-[#0B132B] border border-[#00F5D4]/40 px-3 py-1.5 rounded-lg">
-            متصل بالسيرفر السحابي ☁️
+            {syncStatus}
           </span>
         </header>
 
@@ -1580,7 +1627,7 @@ function FinalCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
   return (
     <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
-        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
+        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️️ يوجد خلل وتعديل</span>}
         <span>{t.title}</span>
       </td>
       <td className="p-3">
