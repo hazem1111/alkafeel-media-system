@@ -13,24 +13,14 @@ export default function MediaDashboard() {
   const [loginPassword, setLoginPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
 
-  // تحميل البيانات من التخزين المؤقت المحلي (LocalStorage) أولاً كاحتياط فوري، ثم المزامنة مع السيرفر
-  const [tasks, setTasks] = useState(() => {
-    try {
-      const localTasks = localStorage.getItem('alkafeel_media_tasks_backup');
-      if (localTasks) return JSON.parse(localTasks);
-    } catch(e) { console.error(e); }
-    return [];
+  // نظام اختيار نوع السيرفر (سحابي أو محلي)
+  const [serverMode, setServerMode] = useState(() => {
+    return localStorage.getItem('alkafeel_media_server_mode') || 'cloud'; // 'cloud' أو 'local'
   });
 
-  const [socialLogs, setSocialLogs] = useState(() => {
-    try {
-      const localSocial = localStorage.getItem('alkafeel_media_social_backup');
-      if (localSocial) return JSON.parse(localSocial);
-    } catch(e) { console.error(e); }
-    return [];
-  });
-
-  const [syncStatus, setSyncStatus] = useState('متصل بالسيرفر السحابي ☁️'); // مؤشر مرئي لحالة الحفظ والاتصال
+  const [tasks, setTasks] = useState([]);
+  const [socialLogs, setSocialLogs] = useState([]);
+  const [syncStatus, setSyncStatus] = useState('جاري الاتصال...');
 
   const [employeeAccounts, setEmployeeAccounts] = useState({
     'حازم': { name: 'المهندس حازم فاضل الأسدي', role: 'admin', pass: 'JUVEjuve12' },
@@ -102,15 +92,18 @@ export default function MediaDashboard() {
   const [socialMessages, setSocialMessages] = useState('');
   const [socialComments, setSocialComments] = useState('');
 
-  useEffect(() => {
-    fetch('/api/data')
+  // دالة جلب البيانات بناءً على السيرفر المختار (محلي أو سحابي)
+  const loadData = () => {
+    setIsLoading(true);
+    const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
+
+    fetch(endpoint)
       .then(res => res.json())
       .then(data => {
         if (data && data.tasks && Array.isArray(data.tasks)) {
           setTasks(data.tasks);
-          localStorage.setItem('alkafeel_media_tasks_backup', JSON.stringify(data.tasks));
-        } else if (tasks.length === 0) {
-          const defaultTasks = [
+        } else {
+          setTasks([
             { 
               id: 1, 
               title: 'تغطية عملية زراعة الكلى المعقدة', 
@@ -136,14 +129,11 @@ export default function MediaDashboard() {
               hasError: false,
               notes: 'عمل ممتاز'
             }
-          ];
-          setTasks(defaultTasks);
-          localStorage.setItem('alkafeel_media_tasks_backup', JSON.stringify(defaultTasks));
+          ]);
         }
 
         if (data && data.socialLogs && Array.isArray(data.socialLogs)) {
           setSocialLogs(data.socialLogs);
-          localStorage.setItem('alkafeel_media_social_backup', JSON.stringify(data.socialLogs));
         }
 
         if (data && data.employeeAccounts && typeof data.employeeAccounts === 'object') {
@@ -151,28 +141,29 @@ export default function MediaDashboard() {
           delete cleanedAccounts['hazem'];
           setEmployeeAccounts(prev => ({ ...prev, ...cleanedAccounts }));
         }
+
+        setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️' : 'متصل بالسيرفر السحابي ☁️');
         setIsLoading(false);
       })
       .catch(err => {
-        console.error("فشل الاتصال بالسيرفر، وتم الاعتماد على التخزين الاحتياطي المحلي:", err);
-        setSyncStatus('وضع عدم الاتصال — تم تفعيل التخزين المحلي ⚠️');
+        console.error("فشل الاتصال:", err);
+        setSyncStatus(serverMode === 'local' ? 'فشل الاتصال بالسيرفر المحلي ⚠' : 'فشل الاتصال بالسيرفر السحابي ⚠');
         setIsLoading(false);
       });
-  }, []);
+  };
 
-  // دالة المزامنة المحدثة مع التخزين المحلي الاحتياطي
+  useEffect(() => {
+    loadData();
+  }, [serverMode]);
+
+  // دالة الحفظ والمزامنة بحسب السيرفر المختار
   const syncWithServer = (updatedTasks, updatedSocial, updatedAccounts) => {
     const finalTasks = updatedTasks !== undefined ? updatedTasks : tasks;
     const finalSocial = updatedSocial !== undefined ? updatedSocial : socialLogs;
     const finalAccounts = updatedAccounts !== undefined ? updatedAccounts : employeeAccounts;
 
-    // حفظ فوري في التخزين المؤقت المحلي (LocalStorage Backup) لحماية البيانات
-    try {
-      localStorage.setItem('alkafeel_media_tasks_backup', JSON.stringify(finalTasks));
-      localStorage.setItem('alkafeel_media_social_backup', JSON.stringify(finalSocial));
-    } catch(e) { console.error(e); }
-
-    setSyncStatus('جاري الحفظ سحابياً... 🔄');
+    const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
+    setSyncStatus('جاري الحفظ... 🔄');
 
     const payload = {
       tasks: finalTasks,
@@ -180,16 +171,23 @@ export default function MediaDashboard() {
       employeeAccounts: finalAccounts
     };
 
-    fetch('/api/data', {
+    fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    .then(() => setSyncStatus('متصل بالسيرفر السحابي ☁️ (تم الحفظ ✅)'))
+    .then(() => {
+      setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️ (تم الحفظ ✅)' : 'متصل بالسيرفر السحابي ☁️ (تم الحفظ ✅)');
+    })
     .catch(err => {
-      console.error("خطأ في الحفظ السحابي:", err);
-      setSyncStatus('انقطع الاتصال — محفوظ محلياً ⚠️️');
+      console.error("خطأ في الحفظ:", err);
+      setSyncStatus('فشل الحفظ ⚠');
     });
+  };
+
+  const toggleServerMode = (mode) => {
+    setServerMode(mode);
+    localStorage.setItem('alkafeel_media_server_mode', mode);
   };
 
   const handleLogin = (e) => {
@@ -577,7 +575,7 @@ export default function MediaDashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0B132B] flex items-center justify-center text-[#00F5D4] font-black text-xl" dir="rtl">
-        جاري الاتصال بالسيرفر السحابي وتحميل البيانات... ⏳
+        جاري الاتصال بالسيرفر وتحميل البيانات... ⏳
       </div>
     );
   }
@@ -591,7 +589,7 @@ export default function MediaDashboard() {
               <span className="text-xs font-bold text-[#0B132B]">الكفيل</span>
             </div>
             <h2 className="text-xl md:text-2xl font-black text-[#00F5D4]">مستشفى الكفيل التخصصي</h2>
-            <p className="text-xs md:text-sm text-gray-300 font-semibold">شعبة الإعلام — النظام السحابي المركزي</p>
+            <p className="text-xs md:text-sm text-gray-300 font-semibold">شعبة الإعلام — النظام المركزي</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
@@ -684,21 +682,40 @@ export default function MediaDashboard() {
           <button onClick={handleLogout} className="w-full bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 py-2.5 rounded-xl text-xs font-bold">
             تسجيل الخروج 🚪
           </button>
-          {/* مؤشر الحالة والمزامنة المضاف حديثاً */}
           <p className="text-[10px] text-[#00F5D4] text-center font-bold">{syncStatus}</p>
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-[#0B132B]">
         
+        {/* شريط العنوان العلوي مع خيار التبديل بين السيرفر المحلي والسحابي */}
         <header className="hidden md:flex bg-[#1C2541] px-8 py-4 border-b border-[#00F5D4]/20 justify-between items-center shadow-sm print:hidden">
           <div>
             <h1 className="text-2xl font-black text-[#00F5D4]">{activeTab}</h1>
-            <p className="text-xs text-gray-300 mt-0.5">النظام السحابي المركزي</p>
+            <p className="text-xs text-gray-300 mt-0.5">النظام المركزي لمستشفى الكفيل</p>
           </div>
-          <span className="text-xs font-bold text-[#00F5D4] bg-[#0B132B] border border-[#00F5D4]/40 px-3 py-1.5 rounded-lg">
-            {syncStatus}
-          </span>
+
+          <div className="flex items-center gap-4">
+            {/* خيارات اختيار نوع السيرفر */}
+            <div className="bg-[#0B132B] p-1.5 rounded-xl border border-[#00F5D4]/30 flex items-center gap-2">
+              <button 
+                onClick={() => toggleServerMode('cloud')} 
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${serverMode === 'cloud' ? 'bg-[#00F5D4] text-[#0B132B] shadow' : 'text-gray-300 hover:text-white'}`}
+              >
+                ☁️ السيرفر السحابي
+              </button>
+              <button 
+                onClick={() => toggleServerMode('local')} 
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${serverMode === 'local' ? 'bg-[#00F5D4] text-[#0B132B] shadow' : 'text-gray-300 hover:text-white'}`}
+              >
+                🖥️ السيرفر المحلي
+              </button>
+            </div>
+
+            <span className="text-xs font-bold text-[#00F5D4] bg-[#0B132B] border border-[#00F5D4]/40 px-3 py-1.5 rounded-lg">
+              {syncStatus}
+            </span>
+          </div>
         </header>
 
         <div className="p-4 md:p-8">
@@ -1533,7 +1550,7 @@ export default function MediaDashboard() {
             <div className="space-y-6 max-w-xl mx-auto">
               {currentUser.role === 'admin' ? (
                 <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-8 rounded-2xl shadow text-center space-y-6">
-                  <h2 className="text-xl font-bold text-white">النسخ الاحتياطي السحابي</h2>
+                  <h2 className="text-xl font-bold text-white">النسخ الاحتياطي السحابي والمحلي</h2>
                   <button onClick={() => {
                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ tasks, socialLogs, employeeAccounts }, null, 2));
                     const downloadAnchor = document.createElement('a');
@@ -1627,7 +1644,7 @@ function FinalCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
   return (
     <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
-        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️️ يوجد خلل وتعديل</span>}
+        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
         <span>{t.title}</span>
       </td>
       <td className="p-3">
