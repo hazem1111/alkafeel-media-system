@@ -1541,7 +1541,7 @@ function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
   return (
     <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
-        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️️ يوجد خلل وتعديل</span>}
+        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
         <span>{t.title}</span>
       </td>
       <td className="p-3">
@@ -1709,7 +1709,7 @@ function PublishRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTas
         {currentUser.role === 'admin' && (
           <>
             <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1 bg-blue-950 text-blue-300 border border-blue-800 rounded-lg text-xs font-bold">✏️ تعديل</button>
-            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️️ حذف</button>
+            <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
           </>
         )}
       </td>
