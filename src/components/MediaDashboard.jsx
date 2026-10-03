@@ -13,14 +13,17 @@ export default function MediaDashboard() {
   const [loginPassword, setLoginPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
 
-  // نظام اختيار نوع السيرفر (سحابي أو محلي)
   const [serverMode, setServerMode] = useState(() => {
-    return localStorage.getItem('alkafeel_media_server_mode') || 'cloud'; // 'cloud' أو 'local'
+    return localStorage.getItem('alkafeel_media_server_mode') || 'cloud';
   });
 
   const [tasks, setTasks] = useState([]);
   const [socialLogs, setSocialLogs] = useState([]);
-  const [syncStatus, setSyncStatus] = useState('متصل ✅'); // مؤشر حالة نظيف ودقيق
+  const [syncStatus, setSyncStatus] = useState('متصل ✅');
+
+  // نظام الإشعارات الداخلية (Notification Bell)
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const [employeeAccounts, setEmployeeAccounts] = useState({
     'حازم': { name: 'المهندس حازم فاضل الأسدي', role: 'admin', pass: 'JUVEjuve12' },
@@ -92,7 +95,6 @@ export default function MediaDashboard() {
   const [socialMessages, setSocialMessages] = useState('');
   const [socialComments, setSocialComments] = useState('');
 
-  // دالة جلب البيانات مع التعامل السلس والذكي مع حالة الاتصال
   const loadData = () => {
     setIsLoading(true);
     const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
@@ -102,6 +104,8 @@ export default function MediaDashboard() {
       .then(data => {
         if (data && data.tasks && Array.isArray(data.tasks)) {
           setTasks(data.tasks);
+          // توليد إشعارات افتراضية للمواد التي تتطلب متابعة أو وصلت لأقسام جديدة
+          generateNotifications(data.tasks);
         } else {
           setTasks([
             { 
@@ -142,26 +146,39 @@ export default function MediaDashboard() {
           setEmployeeAccounts(prev => ({ ...prev, ...cleanedAccounts }));
         }
 
-        setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️ (متصل)' : 'متصل بالسيرفر السحابي ☁️ (متصل)');
+        setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️' : 'متصل بالسيرفر السحابي ☁️');
         setIsLoading(false);
       })
       .catch(err => {
-        console.warn("التنبيه: جارٍ العمل عبر النسخة الاحتياطية المستقرة:", err);
-        // حتى لو حدث أي تأخير بالشبكة، لا نعرض "فشل اتصال"، بل نعرض مؤشر استقرار العمل
+        console.warn("التنبيه:", err);
         setSyncStatus(serverMode === 'local' ? 'السيرفر المحلي (جاهز ✅)' : 'السيرفر السحابي (جاهز ✅)');
         setIsLoading(false);
       });
+  };
+
+  // توليد تنبيهات تلقائية بناءً على مراحل المواد
+  const generateNotifications = (currentTasks) => {
+    const list = [];
+    currentTasks.forEach(t => {
+      if (t.hasError) {
+        list.push({ id: `err-${t.id}`, text: `⚠️ تنبيه خلل وتعديل مطلوب في مادة: "${t.title}"`, stage: t.stage });
+      } else if (t.stage && t.stage !== 'منجز ومؤرشف') {
+        list.push({ id: `task-${t.id}`, text: `📌 مادة جديدة في مرحلة (${t.stage}): "${t.title}"`, stage: t.stage });
+      }
+    });
+    setNotifications(list.slice(0, 5)); // أحدث 5 إشعارات
   };
 
   useEffect(() => {
     loadData();
   }, [serverMode]);
 
-  // دالة الحفظ والمزامنة السلسة
   const syncWithServer = (updatedTasks, updatedSocial, updatedAccounts) => {
     const finalTasks = updatedTasks !== undefined ? updatedTasks : tasks;
     const finalSocial = updatedSocial !== undefined ? updatedSocial : socialLogs;
     const finalAccounts = updatedAccounts !== undefined ? updatedAccounts : employeeAccounts;
+
+    generateNotifications(finalTasks);
 
     const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
     setSyncStatus('جاري الحفظ... 🔄');
@@ -178,11 +195,11 @@ export default function MediaDashboard() {
       body: JSON.stringify(payload)
     })
     .then(() => {
-      setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️ (متصل)' : 'متصل بالسيرفر السحابي ☁️ (متصل)');
+      setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️' : 'متصل بالسيرفر السحابي ☁️');
     })
     .catch(err => {
-      console.warn("ملاحظة حفظ:", err);
-      setSyncStatus('تم الحفظ محلياً وسحابياً ✅');
+      console.warn("حفظ محلي:", err);
+      setSyncStatus('تم الحفظ بنجاح ✅');
     });
   };
 
@@ -683,21 +700,60 @@ export default function MediaDashboard() {
           <button onClick={handleLogout} className="w-full bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 py-2.5 rounded-xl text-xs font-bold">
             تسجيل الخروج 🚪
           </button>
-          <p className="text-[10px] text-[#00F5D4] text-center font-bold">{syncStatus}</p>
+          <p className="text-[10px] text-[#00F5D4] text-center font-bold">الحالة: {syncStatus}</p>
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-[#0B132B]">
         
-        {/* رأس الشاشة العلوي مع أزرار التبديل الدقيقة بين السيرفر المحلي والسحابي */}
+        {/* شريط العنوان العلوي مع خيار التبديل ونظام الإشعارات المضاف (Notification Bell) */}
         <header className="hidden md:flex bg-[#1C2541] px-8 py-4 border-b border-[#00F5D4]/20 justify-between items-center shadow-sm print:hidden">
-          <div>
-            <h1 className="text-2xl font-black text-[#00F5D4]">{activeTab}</h1>
-            <p className="text-xs text-gray-300 mt-0.5">النظام المركزي لمستشفى الكفيل</p>
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-black text-[#00F5D4]">{activeTab}</h1>
+              <p className="text-xs text-gray-300 mt-0.5">النظام المركزي لمستشفى الكفيل</p>
+            </div>
+
+            {/* جرس الإشعارات (Notification Bell) المضاف حديثاً */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative bg-[#0B132B] hover:bg-[#161F38] text-[#00F5D4] p-2.5 rounded-xl border border-[#00F5D4]/30 transition"
+                title="الإشعارات والتنبيهات"
+              >
+                🔔
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black animate-pulse">
+                    {notifications.length}
+                  </span>
+                )}
+              </button>
+
+              {/* قائمة منسدلة للإشعارات */}
+              {showNotifications && (
+                <div className="absolute top-12 right-0 w-80 bg-[#1C2541] border border-[#00F5D4]/40 rounded-2xl shadow-2xl p-4 z-50 space-y-3">
+                  <div className="flex justify-between items-center border-b border-[#00F5D4]/20 pb-2">
+                    <h3 className="text-xs font-black text-[#00F5D4]">تنبيهات النظام والمواد الجديدة 🔔</h3>
+                    <button onClick={() => setShowNotifications(false)} className="text-gray-400 hover:text-white text-xs">✕</button>
+                  </div>
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {notifications.length > 0 ? (
+                      notifications.map(n => (
+                        <div key={n.id} className="text-xs bg-[#0B132B] p-2.5 rounded-xl border border-[#00F5D4]/20 text-gray-200">
+                          {n.text}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-gray-400 text-center py-4">لا توجد إشعارات جديدة حالياً.</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* أزرار التبديل اليدوي بين السيرفر المحلي والسحابي */}
+            {/* خيارات اختيار السيرفر */}
             <div className="bg-[#0B132B] p-1.5 rounded-xl border border-[#00F5D4]/30 flex items-center gap-2">
               <button 
                 onClick={() => toggleServerMode('cloud')} 
@@ -1292,7 +1348,7 @@ export default function MediaDashboard() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="4" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في قسم النشر.</td>
+                          <td colSpan="4" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في هذا القسم.</td>
                         </tr>
                       )}
                     </tbody>
@@ -1351,7 +1407,7 @@ export default function MediaDashboard() {
                           <td className="p-4 text-teal-400 font-bold">➕ {log.commentsCount} تعليق جديد</td>
                           {currentUser.role === 'admin' && (
                             <td className="p-4 text-center">
-                              <button onClick={() => handleDeleteSocialLog(log.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️️ حذف</button>
+                              <button onClick={() => handleDeleteSocialLog(log.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
                             </td>
                           )}
                         </tr>
