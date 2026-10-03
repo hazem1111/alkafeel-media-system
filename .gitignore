@@ -1,0 +1,4 @@
+dist_electron/
+release-builds/
+dist/
+node_modules/

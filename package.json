@@ -1,0 +1,30 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "vite build",
+    "build-win": "electron-builder --win --x64"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.6.1",
+    "electron": "^31.0.0",
+    "electron-builder": "^25.1.8",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "vite": "^5.2.0"
+  }
+}
