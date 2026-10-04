@@ -19,9 +19,9 @@ export default function MediaDashboard() {
 
   const [tasks, setTasks] = useState([]);
   const [socialLogs, setSocialLogs] = useState([]);
-  const [syncStatus, setSyncStatus] = useState('متصل ✅');
+  const [isServerConnected, setIsServerConnected] = useState(true);
 
-  // نظام الإشعارات الداخلية (Notification Bell)
+  // نظام الإشعارات الداخلية
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -95,23 +95,33 @@ export default function MediaDashboard() {
   const [socialMessages, setSocialMessages] = useState('');
   const [socialComments, setSocialComments] = useState('');
 
-  // توليد تنبيهات تلقائية بناءً على مراحل المواد
+  // توليد تنبيهات تلقائية فعالة
   const generateNotifications = (currentTasks) => {
     const list = [];
     currentTasks.forEach(t => {
       if (t.hasError) {
-        list.push({ id: `err-${t.id}`, text: `⚠️️ تنبيه خلل وتعديل مطلوب في مادة: "${t.title}"`, stage: t.stage });
+        list.push({ 
+          id: `err-${t.id}`, 
+          text: `⚠️ تنبيه: مادة بها تعديل وملاحظات مطلوبة: "${t.title}" (${t.stage})`, 
+          notes: t.notes,
+          isError: true,
+          stage: t.stage 
+        });
       } else if (t.stage && t.stage !== 'منجز ومؤرشف') {
-        list.push({ id: `task-${t.id}`, text: `📌 مادة جديدة في مرحلة (${t.stage}): "${t.title}"`, stage: t.stage });
+        list.push({ 
+          id: `task-${t.id}`, 
+          text: `📌 مادة في مرحلة (${t.stage}): "${t.title}"`, 
+          isError: false,
+          stage: t.stage 
+        });
       }
     });
-    setNotifications(list.slice(0, 5));
+    setNotifications(list);
   };
 
   const loadData = () => {
     setIsLoading(true);
 
-    // 1. القراءة الفورية من التخزين المحلي لضمان عدم ضياع أي بيانات
     let cachedTasks = [];
     try {
       const savedTasks = localStorage.getItem('alkafeel_media_tasks_data');
@@ -131,15 +141,18 @@ export default function MediaDashboard() {
         setEmployeeAccounts(prev => ({ ...prev, ...JSON.parse(savedAccounts) }));
       }
     } catch (e) {
-      console.error("خطأ في قراءة البيانات المحلية:", e);
+      console.error(e);
     }
 
     const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
 
-    // 2. محاولة المزامنة مع السيرفر إن وجد
     fetch(endpoint)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("Server not responding");
+        return res.json();
+      })
       .then(data => {
+        setIsServerConnected(true);
         if (data && data.tasks && Array.isArray(data.tasks)) {
           setTasks(data.tasks);
           localStorage.setItem('alkafeel_media_tasks_data', JSON.stringify(data.tasks));
@@ -188,12 +201,10 @@ export default function MediaDashboard() {
           localStorage.setItem('alkafeel_media_accounts_data', JSON.stringify(cleanedAccounts));
         }
 
-        setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️' : 'متصل بالسيرفر السحابي ☁️');
         setIsLoading(false);
       })
-      .catch(err => {
-        console.warn("تعذر الاتصال بالسيرفر، الاعتماد على التخزين المحلي:", err);
-        setSyncStatus('التخزين المحلي متصل ومحفوظ ✅');
+      .catch(() => {
+        setIsServerConnected(false);
         setIsLoading(false);
       });
   };
@@ -207,38 +218,34 @@ export default function MediaDashboard() {
     const finalSocial = updatedSocial !== undefined ? updatedSocial : socialLogs;
     const finalAccounts = updatedAccounts !== undefined ? updatedAccounts : employeeAccounts;
 
-    // 1. الحفظ الفوري المباشر في التخزين المحلي للمتصفح
     try {
       localStorage.setItem('alkafeel_media_tasks_data', JSON.stringify(finalTasks));
       localStorage.setItem('alkafeel_media_social_data', JSON.stringify(finalSocial));
       localStorage.setItem('alkafeel_media_accounts_data', JSON.stringify(finalAccounts));
     } catch (e) {
-      console.error("خطأ في حفظ البيانات محلياً:", e);
+      console.error(e);
     }
 
     generateNotifications(finalTasks);
 
     const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
-    setSyncStatus('جاري الحفظ... 🔄');
-
     const payload = {
       tasks: finalTasks,
       socialLogs: finalSocial,
       employeeAccounts: finalAccounts
     };
 
-    // 2. إرسال النسخة للسيرفر في الخلفية
     fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    .then(() => {
-      setSyncStatus(serverMode === 'local' ? 'متصل بالسيرفر المحلي 🖥️' : 'متصل بالسيرفر السحابي ☁️');
+    .then(res => {
+      if (res.ok) setIsServerConnected(true);
+      else setIsServerConnected(false);
     })
-    .catch(err => {
-      console.warn("حفظ محلي فقط:", err);
-      setSyncStatus('تم الحفظ محلياً بنجاح ✅');
+    .catch(() => {
+      setIsServerConnected(false);
     });
   };
 
@@ -427,7 +434,7 @@ export default function MediaDashboard() {
     setTasks(updatedTasks);
     syncWithServer(updatedTasks, undefined, undefined);
     setDirectPubTitle(''); setDirectPubLink(''); setDirectPubNotes('');
-    alert("تم تسجيل ونشر المادة الجاهزة وإضافتها للتقرير الشهري والإحصائيات بنجاح.");
+    alert("تم تسجيل ونشر المادة الجاهزة بنجاح.");
   };
 
   const handleStageAction = (id, currentStage, actionType) => {
@@ -440,10 +447,18 @@ export default function MediaDashboard() {
         let updatedFields = {};
 
         if (currentStage === '1. التصوير') {
-          if (actionType === 'advance') { nextStage = '1.5. التدقيق الفيديوي'; prog = 20; hasErr = false; }
+          if (actionType === 'advance') { 
+            nextStage = '1.5. التدقيق الفيديوي'; 
+            prog = 20; 
+            hasErr = false; // تم حل الخلل وإعادة الإرسال
+          }
         }
         else if (currentStage === '1.5. التدقيق الفيديوي') {
-          if (actionType === 'return') { nextStage = '1. التصوير'; prog = 10; hasErr = true; } 
+          if (actionType === 'return') { 
+            nextStage = '1. التصوير'; 
+            prog = 10; 
+            hasErr = true; // علامة الخلل والتعديل المطلوب للمصور
+          } 
           else if (actionType === 'advance') { 
             nextStage = '3. التحرير'; 
             prog = 35; 
@@ -522,7 +537,7 @@ export default function MediaDashboard() {
   const handleEditTaskNotes = (id) => {
     const task = tasks.find(t => t.id === id);
     if (!task) return;
-    const newNotesVal = prompt("تعديل ملاحظات المادة:", task.notes || '');
+    const newNotesVal = prompt("تعديل ملاحظات المادة والتوجيهات المطلوبة:", task.notes || '');
     if (newNotesVal !== null) {
       const updatedTasks = tasks.map(t => t.id === id ? { ...t, notes: newNotesVal } : t);
       setTasks(updatedTasks);
@@ -692,6 +707,8 @@ export default function MediaDashboard() {
     return false;
   };
 
+  const cameramanReturnedTasks = tasks.filter(t => t.stage === '1. التصوير');
+
   return (
     <div className="min-h-screen bg-[#0B132B] text-gray-100 flex flex-col md:flex-row font-sans select-none" dir="rtl">
       
@@ -739,13 +756,12 @@ export default function MediaDashboard() {
           <button onClick={handleLogout} className="w-full bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 py-2.5 rounded-xl text-xs font-bold">
             تسجيل الخروج 🚪
           </button>
-          <p className="text-[10px] text-[#00F5D4] text-center font-bold">الحالة: {syncStatus}</p>
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-[#0B132B]">
         
-        {/* شريط العنوان العلوي مع خيار التبديل ونظام الإشعارات المضاف */}
+        {/* شريط العنوان العلوي المحسن */}
         <header className="hidden md:flex bg-[#1C2541] px-8 py-4 border-b border-[#00F5D4]/20 justify-between items-center shadow-sm print:hidden">
           <div className="flex items-center gap-4">
             <div>
@@ -753,7 +769,7 @@ export default function MediaDashboard() {
               <p className="text-xs text-gray-300 mt-0.5">النظام المركزي لمستشفى الكفيل</p>
             </div>
 
-            {/* جرس الإشعارات */}
+            {/* جرس الإشعارات الفعال */}
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -762,24 +778,37 @@ export default function MediaDashboard() {
               >
                 🔔
                 {notifications.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black animate-pulse">
+                  <span className={`absolute -top-1 -right-1 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black ${notifications.some(n => n.isError) ? 'bg-red-600 animate-pulse' : 'bg-cyan-600'}`}>
                     {notifications.length}
                   </span>
                 )}
               </button>
 
-              {/* قائمة منسدلة للإشعارات */}
+              {/* القائمة المنسدلة للإشعارات */}
               {showNotifications && (
-                <div className="absolute top-12 right-0 w-80 bg-[#1C2541] border border-[#00F5D4]/40 rounded-2xl shadow-2xl p-4 z-50 space-y-3">
+                <div className="absolute top-12 right-0 w-88 bg-[#1C2541] border border-[#00F5D4]/40 rounded-2xl shadow-2xl p-4 z-50 space-y-3">
                   <div className="flex justify-between items-center border-b border-[#00F5D4]/20 pb-2">
                     <h3 className="text-xs font-black text-[#00F5D4]">تنبيهات النظام والمواد الجديدة 🔔</h3>
                     <button onClick={() => setShowNotifications(false)} className="text-gray-400 hover:text-white text-xs">✕</button>
                   </div>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                  <div className="space-y-2 max-h-72 overflow-y-auto">
                     {notifications.length > 0 ? (
                       notifications.map(n => (
-                        <div key={n.id} className="text-xs bg-[#0B132B] p-2.5 rounded-xl border border-[#00F5D4]/20 text-gray-200">
-                          {n.text}
+                        <div 
+                          key={n.id} 
+                          onClick={() => { setActiveTab(n.stage); setShowNotifications(false); }}
+                          className={`text-xs p-3 rounded-xl border cursor-pointer transition ${
+                            n.isError 
+                              ? 'bg-red-950/40 border-red-500/50 text-red-200 hover:bg-red-950/70' 
+                              : 'bg-[#0B132B] border-[#00F5D4]/20 text-gray-200 hover:bg-[#161F38]'
+                          }`}
+                        >
+                          <div className="font-bold">{n.text}</div>
+                          {n.notes && (
+                            <div className="text-[11px] text-amber-300 mt-1 bg-black/30 p-1.5 rounded">
+                              📝 ملاحظة التعديل: {n.notes}
+                            </div>
+                          )}
                         </div>
                       ))
                     ) : (
@@ -791,26 +820,43 @@ export default function MediaDashboard() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* خيارات اختيار السيرفر */}
+          <div className="flex items-center gap-3">
+            {/* اختيار السيرفر مع المؤشر الضوئي (أخضر = متصل، أحمر = غير متصل) */}
             <div className="bg-[#0B132B] p-1.5 rounded-xl border border-[#00F5D4]/30 flex items-center gap-2">
               <button 
                 onClick={() => toggleServerMode('cloud')} 
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${serverMode === 'cloud' ? 'bg-[#00F5D4] text-[#0B132B] shadow' : 'text-gray-300 hover:text-white'}`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
+                  serverMode === 'cloud' 
+                    ? isServerConnected 
+                      ? 'bg-emerald-600 text-white shadow' 
+                      : 'bg-rose-600 text-white shadow'
+                    : 'text-gray-300 hover:text-white'
+                }`}
               >
-                ☁️ السيرفر السحابي
+                <span>☁️</span>
+                <span>السيرفر السحابي</span>
+                {serverMode === 'cloud' && (
+                  <span className={`w-2 h-2 rounded-full ${isServerConnected ? 'bg-emerald-300' : 'bg-rose-300 animate-ping'}`}></span>
+                )}
               </button>
+
               <button 
                 onClick={() => toggleServerMode('local')} 
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${serverMode === 'local' ? 'bg-[#00F5D4] text-[#0B132B] shadow' : 'text-gray-300 hover:text-white'}`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
+                  serverMode === 'local' 
+                    ? isServerConnected 
+                      ? 'bg-emerald-600 text-white shadow' 
+                      : 'bg-rose-600 text-white shadow'
+                    : 'text-gray-300 hover:text-white'
+                }`}
               >
-                🖥️ السيرفر المحلي
+                <span>🖥️</span>
+                <span>السيرفر المحلي</span>
+                {serverMode === 'local' && (
+                  <span className={`w-2 h-2 rounded-full ${isServerConnected ? 'bg-emerald-300' : 'bg-rose-300 animate-ping'}`}></span>
+                )}
               </button>
             </div>
-
-            <span className="text-xs font-bold text-[#00F5D4] bg-[#0B132B] border border-[#00F5D4]/40 px-3 py-1.5 rounded-lg">
-              {syncStatus}
-            </span>
           </div>
         </header>
 
@@ -866,7 +912,68 @@ export default function MediaDashboard() {
           )}
 
           {activeTab === '1. التصوير' && (
-            <div className="space-y-6 max-w-3xl mx-auto">
+            <div className="space-y-8 max-w-4xl mx-auto">
+              
+              {/* جدول المواد المعادة للمصور مع التحذير الأحمر والملاحظات */}
+              {cameramanReturnedTasks.length > 0 && (
+                <div className="bg-[#1C2541] border-2 border-red-500/60 p-6 rounded-2xl shadow-xl space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-red-600 text-white text-xs px-2.5 py-1 rounded-full font-black animate-pulse">⚠️️ مطلوب تعديل</span>
+                    <h3 className="text-lg font-bold text-red-300">مواد معادة من التدقيق الفيديوي تتطلب تعديلاً من المصور</h3>
+                  </div>
+
+                  <div className="bg-[#0B132B] p-4 rounded-xl border border-red-500/30 overflow-x-auto">
+                    <table className="w-full text-right min-w-[650px]">
+                      <thead>
+                        <tr className="text-xs text-red-400 border-b border-gray-800">
+                          <th className="p-3">عنوان المادة</th>
+                          <th className="p-3">المصور</th>
+                          <th className="p-3">ملاحظات التعديل والخلل 📝</th>
+                          <th className="p-3 text-center">الإجراء بعد التعديل</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-800 text-sm">
+                        {cameramanReturnedTasks.map(t => {
+                          const allowed = isAllowedToManageSection('1. التصوير');
+                          return (
+                            <tr key={t.id} className="bg-red-950/20 hover:bg-red-950/40">
+                              <td className="p-3 font-bold text-white flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                                <span>{t.title}</span>
+                              </td>
+                              <td className="p-3 text-xs text-gray-300">{t.cameraman}</td>
+                              <td className="p-3 text-xs text-amber-300 font-medium">
+                                <div className="bg-[#0B132B] p-2 rounded-lg border border-red-900/50">
+                                  {t.notes || 'لا توجد ملاحظات تفصيلية'}
+                                </div>
+                                {allowed && (
+                                  <button onClick={() => handleEditTaskNotes(t.id)} className="text-[11px] text-cyan-400 underline mt-1 block">
+                                    تعديل/إضافة ملاحظة 📝
+                                  </button>
+                                )}
+                              </td>
+                              <td className="p-3 text-center">
+                                {allowed ? (
+                                  <button 
+                                    onClick={() => handleStageAction(t.id, '1. التصوير', 'advance')} 
+                                    className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-black shadow"
+                                  >
+                                    إعادة الإرسال للتدقيق الفيديوي ➡
+                                  </button>
+                                ) : (
+                                  <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded">مشاهدة فقط 🔒</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* نموذج إضافة مادة جديدة للمصور */}
               {canEditSection('cameraman') && (
                 <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 md:p-8 rounded-2xl shadow space-y-6">
                   <h2 className="text-lg md:text-xl font-bold text-white">📷 صفحة المصور: إضافة مادة جديدة</h2>
@@ -931,10 +1038,11 @@ export default function MediaDashboard() {
               <div className="bg-[#1C2541] border border-[#00F5D4]/20 p-6 rounded-2xl space-y-4 shadow">
                 <h2 className="text-lg font-bold text-[#00F5D4]">متابعة قسم: التدقيق الفيديوي</h2>
                 <div className="bg-[#0B132B] p-4 rounded-xl border border-[#00F5D4]/20 overflow-x-auto">
-                  <table className="w-full text-right min-w-[700px]">
+                  <table className="w-full text-right min-w-[750px]">
                     <thead>
                       <tr className="text-xs text-[#00F5D4] border-b border-gray-800">
                         <th className="p-3">عنوان المادة</th>
+                        <th className="p-3">ملاحظات المادة والتعديل 📝</th>
                         <th className="p-3">اختر مدقق الفيديو (طارق أو رشا) 🎥</th>
                         <th className="p-3 text-center">أزرار التحكم وإدارة المراحل</th>
                       </tr>
@@ -947,6 +1055,7 @@ export default function MediaDashboard() {
                             t={t} 
                             handleStageAction={handleStageAction} 
                             handleEditTaskTitle={handleEditTaskTitle} 
+                            handleEditTaskNotes={handleEditTaskNotes}
                             handleDeleteTask={handleDeleteTask} 
                             currentUser={currentUser}
                             videoCheckerSelections={videoCheckerSelections}
@@ -956,7 +1065,7 @@ export default function MediaDashboard() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="3" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في هذا القسم.</td>
+                          <td colSpan="4" className="p-6 text-center text-gray-400 text-xs font-bold">لا توجد مواد حالياً في هذا القسم.</td>
                         </tr>
                       )}
                     </tbody>
@@ -1129,9 +1238,7 @@ export default function MediaDashboard() {
                                 <div>{t.contentType}</div>
                                 <div className="text-[10px] text-gray-400">📅 {t.addDate || 'بدون تاريخ'}</div>
                               </td>
-                              <td className="p-3 text-xs text-amber-300">
-                                {t.notes || 'لا توجد ملاحظات'}
-                              </td>
+                              <td className="p-3 text-xs text-amber-300">{t.notes || 'لا توجد ملاحظات'}</td>
                               <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
                                 {allowed ? (
                                   <>
@@ -1217,9 +1324,7 @@ export default function MediaDashboard() {
                                 <div>{t.contentType}</div>
                                 <div className="text-[10px] text-gray-400">📅 {t.addDate || 'بدون تاريخ'}</div>
                               </td>
-                              <td className="p-3 text-xs text-amber-300">
-                                {t.notes || 'لا توجد ملاحظات'}
-                              </td>
+                              <td className="p-3 text-xs text-amber-300">{t.notes || 'لا توجد ملاحظات'}</td>
                               <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
                                 {allowed ? (
                                   <>
@@ -1696,13 +1801,21 @@ export default function MediaDashboard() {
   );
 }
 
-function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTask, currentUser, videoCheckerSelections, setVideoCheckerSelections, isAllowed }) {
+function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleEditTaskNotes, handleDeleteTask, currentUser, videoCheckerSelections, setVideoCheckerSelections, isAllowed }) {
   const currentVal = videoCheckerSelections[t.id] || 'طارق جعفر حسين';
   return (
     <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
         {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
         <span>{t.title}</span>
+      </td>
+      <td className="p-3 text-xs text-amber-300">
+        <div className="max-w-xs">{t.notes || 'لا توجد ملاحظات'}</div>
+        {isAllowed && (
+          <button onClick={() => handleEditTaskNotes(t.id)} className="text-[11px] text-cyan-400 underline mt-1 block">
+            كتابة/تعديل ملاحظة التعديل 📝
+          </button>
+        )}
       </td>
       <td className="p-3">
         <select 
@@ -1718,8 +1831,26 @@ function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
       <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
         {isAllowed ? (
           <>
-            <button onClick={() => handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'return')} className="px-3 py-1 bg-amber-950 text-amber-300 border border-amber-800 rounded-lg text-xs font-bold">⬅ إرجاع للتصوير</button>
-            <button onClick={() => handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'advance')} className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold">إرسال للتحرير ➡</button>
+            <button 
+              onClick={() => {
+                if (!t.notes) {
+                  const writeNote = prompt("يرجى كتابة سبب الإرجاع والملاحظات للمصور:");
+                  if (writeNote !== null) {
+                    t.notes = writeNote;
+                  }
+                }
+                handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'return');
+              }} 
+              className="px-3 py-1.5 bg-rose-950 hover:bg-rose-900 text-rose-300 border border-rose-800 rounded-lg text-xs font-bold"
+            >
+              ⬅ إرجاع للتصوير مع ملاحظة
+            </button>
+            <button 
+              onClick={() => handleStageAction(t.id, '1.5. التدقيق الفيديوي', 'advance')} 
+              className="px-3 py-1.5 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 rounded-lg text-xs font-bold"
+            >
+              إرسال للتحرير ➡
+            </button>
           </>
         ) : (
           <span className="text-xs text-gray-500 font-bold bg-gray-900 px-3 py-1 rounded border border-gray-800">مشاهدة فقط 🔒</span>
@@ -1740,7 +1871,7 @@ function FinalCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleDele
   return (
     <tr className={`hover:bg-gray-900/50 ${!isAllowed ? 'opacity-50 grayscale' : ''} ${t.hasError ? 'bg-red-950/30 border-r-4 border-red-500' : ''}`}>
       <td className="p-3 font-bold text-white flex items-center gap-2">
-        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠ يوجد خلل وتعديل</span>}
+        {t.hasError && <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">⚠️ يوجد خلل وتعديل</span>}
         <span>{t.title}</span>
       </td>
       <td className="p-3">
@@ -1854,9 +1985,7 @@ function PublishRow({ t, handleStageAction, handleEditTaskTitle, handleDeleteTas
           <button onClick={() => handleSavePublishInfo(t.id)} className="px-3 py-1.5 bg-blue-900 text-blue-200 rounded font-bold text-[10px] shadow">حفظ بيانات النشر 💾</button>
         )}
       </td>
-      <td className="p-3 text-xs text-amber-300">
-        {t.notes || 'لا توجد ملاحظات'}
-      </td>
+      <td className="p-3 text-xs text-amber-300">{t.notes || 'لا توجد ملاحظات'}</td>
       <td className="p-3 text-center flex justify-center gap-2 flex-wrap">
         {isAllowed ? (
           <>
