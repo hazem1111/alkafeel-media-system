@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "build": "vite build",
-    "build-win": "electron-builder --win --x64"
+    "build-win": "electron-builder --win --x64",
+    "clean": "node clean.js"
   },
   "dependencies": {
     "express": "^4.19.2",
