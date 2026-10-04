@@ -14,7 +14,7 @@ export default function MediaDashboard() {
   const [rememberMe, setRememberMe] = useState(true);
 
   const [serverMode, setServerMode] = useState(() => {
-    return localStorage.getItem('alkafeel_media_server_mode') || 'cloud';
+    return localStorage.getItem('alkafeel_media_server_mode') || 'local';
   });
 
   const [tasks, setTasks] = useState([]);
@@ -95,7 +95,7 @@ export default function MediaDashboard() {
   const [socialMessages, setSocialMessages] = useState('');
   const [socialComments, setSocialComments] = useState('');
 
-  // توليد تنبيهات تلقائية فعالة
+  // توليد تنبيهات تلقائية فعالة للمواد
   const generateNotifications = (currentTasks) => {
     const list = [];
     currentTasks.forEach(t => {
@@ -144,7 +144,10 @@ export default function MediaDashboard() {
       console.error(e);
     }
 
-    const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
+    // الربط المباشر مع السيرفر الداخلي
+    const endpoint = serverMode === 'local' 
+      ? 'http://192.168.31.191:5000/api/data' 
+      : '/api/data';
 
     fetch(endpoint)
       .then(res => {
@@ -228,7 +231,11 @@ export default function MediaDashboard() {
 
     generateNotifications(finalTasks);
 
-    const endpoint = serverMode === 'local' ? 'http://localhost:10000/api/data' : '/api/data';
+    // الربط المباشر مع السيرفر الداخلي
+    const endpoint = serverMode === 'local' 
+      ? 'http://192.168.31.191:5000/api/data' 
+      : '/api/data';
+
     const payload = {
       tasks: finalTasks,
       socialLogs: finalSocial,
@@ -450,14 +457,14 @@ export default function MediaDashboard() {
           if (actionType === 'advance') { 
             nextStage = '1.5. التدقيق الفيديوي'; 
             prog = 20; 
-            hasErr = false; // تم حل الخلل وإعادة الإرسال
+            hasErr = false;
           }
         }
         else if (currentStage === '1.5. التدقيق الفيديوي') {
           if (actionType === 'return') { 
             nextStage = '1. التصوير'; 
             prog = 10; 
-            hasErr = true; // علامة الخلل والتعديل المطلوب للمصور
+            hasErr = true;
           } 
           else if (actionType === 'advance') { 
             nextStage = '3. التحرير'; 
@@ -647,7 +654,7 @@ export default function MediaDashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0B132B] flex items-center justify-center text-[#00F5D4] font-black text-xl" dir="rtl">
-        جاري الاتصال بالسيرفر وتحميل البيانات... ⏳
+        جاري الاتصال بالسيرفر الداخلي وتحميل البيانات... ⏳
       </div>
     );
   }
@@ -824,6 +831,23 @@ export default function MediaDashboard() {
             {/* اختيار السيرفر مع المؤشر الضوئي (أخضر = متصل، أحمر = غير متصل) */}
             <div className="bg-[#0B132B] p-1.5 rounded-xl border border-[#00F5D4]/30 flex items-center gap-2">
               <button 
+                onClick={() => toggleServerMode('local')} 
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
+                  serverMode === 'local' 
+                    ? isServerConnected 
+                      ? 'bg-emerald-600 text-white shadow' 
+                      : 'bg-rose-600 text-white shadow'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                <span>🖥️️</span>
+                <span>السيرفر الداخلي</span>
+                {serverMode === 'local' && (
+                  <span className={`w-2 h-2 rounded-full ${isServerConnected ? 'bg-emerald-300' : 'bg-rose-300 animate-ping'}`}></span>
+                )}
+              </button>
+
+              <button 
                 onClick={() => toggleServerMode('cloud')} 
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
                   serverMode === 'cloud' 
@@ -836,23 +860,6 @@ export default function MediaDashboard() {
                 <span>☁️</span>
                 <span>السيرفر السحابي</span>
                 {serverMode === 'cloud' && (
-                  <span className={`w-2 h-2 rounded-full ${isServerConnected ? 'bg-emerald-300' : 'bg-rose-300 animate-ping'}`}></span>
-                )}
-              </button>
-
-              <button 
-                onClick={() => toggleServerMode('local')} 
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
-                  serverMode === 'local' 
-                    ? isServerConnected 
-                      ? 'bg-emerald-600 text-white shadow' 
-                      : 'bg-rose-600 text-white shadow'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                <span>🖥️</span>
-                <span>السيرفر المحلي</span>
-                {serverMode === 'local' && (
                   <span className={`w-2 h-2 rounded-full ${isServerConnected ? 'bg-emerald-300' : 'bg-rose-300 animate-ping'}`}></span>
                 )}
               </button>
@@ -918,7 +925,7 @@ export default function MediaDashboard() {
               {cameramanReturnedTasks.length > 0 && (
                 <div className="bg-[#1C2541] border-2 border-red-500/60 p-6 rounded-2xl shadow-xl space-y-4">
                   <div className="flex items-center gap-2">
-                    <span className="bg-red-600 text-white text-xs px-2.5 py-1 rounded-full font-black animate-pulse">⚠️️ مطلوب تعديل</span>
+                    <span className="bg-red-600 text-white text-xs px-2.5 py-1 rounded-full font-black animate-pulse">⚠️ مطلوب تعديل</span>
                     <h3 className="text-lg font-bold text-red-300">مواد معادة من التدقيق الفيديوي تتطلب تعديلاً من المصور</h3>
                   </div>
 
@@ -1857,7 +1864,7 @@ function VideoCheckerRow({ t, handleStageAction, handleEditTaskTitle, handleEdit
         )}
         {currentUser.role === 'admin' && (
           <>
-            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1 bg-blue-950 text-blue-300 border border-blue-800 rounded-lg text-xs font-bold">✏️ تعديل</button>
+            <button onClick={() => handleEditTaskTitle(t.id)} className="px-3 py-1 bg-blue-950 text-blue-300 border border-blue-800 rounded-lg text-xs font-bold">✏️️ تعديل</button>
             <button onClick={() => handleDeleteTask(t.id)} className="px-3 py-1 bg-red-950 text-red-300 border border-red-800 rounded-lg text-xs font-bold">🗑️ حذف</button>
           </>
         )}
